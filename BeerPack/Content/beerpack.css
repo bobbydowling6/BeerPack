@@ -1,0 +1,21 @@
+body {
+    background-image: url(/images/background%20image.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#wrapper {margin-left: auto;
+		margin-right: auto;
+		width: 80%;
+		/*background-color: #fff;*/
+		min-width: 400px; max-width: 2048px;
+		}
+.jumbotron {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    background-color: rgba(230,230,230,0.5);
+}
+footer {
+    color: black;
+}
