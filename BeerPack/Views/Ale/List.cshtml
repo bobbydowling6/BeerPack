@@ -1,0 +1,20 @@
+﻿
+@model IEnumerable<BeerPack.Models.Ales>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>Ales</h2>
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-xs-4">
+            <div class="well">
+                <h2>@product.Name</h2>
+                <img class="img-circle img-responsive"  src="@product.Image"/>
+            </div>
+            @Html.ActionLink("Ales", "Index", "Beer", new { ID = product.ID })
+        </div>
+    }
+</div>
+
