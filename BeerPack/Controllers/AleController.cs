@@ -28,7 +28,7 @@ namespace BeerPack.Controllers
                 Name = "Goose Island 312",
                 Price = 3,
                 Description = "Wheat Ale",
-                Image = "images/Ales/gooseisland312.png"
+                Image = "/images/Ales/gooseisland312.png"
             });
             return View(ales);
         }
@@ -41,14 +41,14 @@ namespace BeerPack.Controllers
                 ales.Name = "Shocktop";
                 ales.Description = "Belgian White Ale";
                 ales.Price = 3;
-                ales.Image = "images/Ales/shocktop.jpg";
+                ales.Image = "/images/Ales/shocktop.jpg";
             }
             else if (id == 2)
             {
                 ales.Name = "Goose Island 312";
                 ales.Description = "Wheat Ale";
                 ales.Price = 3;
-                ales.Image = "images/Ales/gooseisland312.png";
+                ales.Image = "/images/Ales/gooseisland312.png";
             }else
             {
                 return HttpNotFound("This product doesn't exist");

@@ -13,7 +13,7 @@
                 <h2>@product.Name</h2>
                 <img class="img-circle img-responsive"  src="@product.Image"/>
             </div>
-            @Html.ActionLink("Ales", "Index", "Beer", new { ID = product.ID })
+            @Html.ActionLink("Beer", "Index", "Ales", new { ID = product.ID })
         </div>
     }
 </div>
