@@ -57,5 +57,19 @@ namespace BeerPack.Controllers
 
             return View(ales);
         }
+
+        [HttpPost]
+        public ActionResult Index(Ales model)
+        {
+            HttpContext.Session.Add("productName", model.Name);
+            HttpContext.Session.Add("productPrice", model.Price.ToString("C"));
+            HttpContext.Session.Add("productQuantity", model.Quantity.ToString());
+
+            Response.AppendCookie(new HttpCookie("productName", model.Name));
+            Response.AppendCookie(new HttpCookie("productPrice", model.Price.ToString("C")));
+            Response.AppendCookie(new HttpCookie("productQuantity", model.Quantity.ToString()));
+
+            return RedirectToAction("Index", "Cart");
+        }
     }
 }
