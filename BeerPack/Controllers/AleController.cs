@@ -55,7 +55,7 @@ namespace BeerPack.Controllers
                 Name = "Kona Brewing Co. Big Wave",
                 Price = 2,
                 Description = "Golden Ale",
-                Image = "/images/Ales/kona-beer/png"
+                Image = "/images/Ales/kona-beer.png"
             });
 
             ales.Add(new Ales
@@ -105,7 +105,7 @@ namespace BeerPack.Controllers
                 ales.Name = "Kona Brewing Co. Big Wave";
                 ales.Description = "Golden Ale";
                 ales.Price = 2;
-                ales.Image = "/images/Ales/kona-beer/png";
+                ales.Image = "/images/Ales/kona-beer.png";
             }
             else if (id == 6)
             {
