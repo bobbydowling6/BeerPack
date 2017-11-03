@@ -1,5 +1,6 @@
 ﻿
-@model IEnumerable<BeerPack.Models.Ales>
+
+@model IEnumerable<BeerPack.Models.IPA>
 @{
     ViewBag.Title = "List";
 }
@@ -8,7 +9,7 @@
 <div class="jumbotron">
     <div class="container">
         <div class="row">
-            <h2>Ales</h2>
+            <h2>IPA's</h2>
             <br />
             @foreach (var product in Model)
             {
@@ -21,9 +22,10 @@
                         <input type="submit" class="btn btn-default" value="Add to Cart" />
 
                     </div>
-                    @Html.ActionLink("Beer", "Index", "Ales", new { ID = product.ID })
+                    @Html.ActionLink("Beer", "Index", "Ipa", new { ID = product.ID })
                 </div>
             }
         </div>
     </div>
 </div>
+

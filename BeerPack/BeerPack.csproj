@@ -161,12 +161,14 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IpaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Ales.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CheckoutDetails.cs" />
+    <Compile Include="Models\IPA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -264,6 +266,8 @@
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Checkout.cshtml" />
     <Content Include="Views\Checkout\Index.cshtml" />
+    <Content Include="Views\Ipa\Index.cshtml" />
+    <Content Include="Views\Ipa\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
