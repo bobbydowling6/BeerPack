@@ -17,7 +17,7 @@ namespace BeerPack.Controllers
             {
                 ID = 1,
                 Name = "Shocktop",
-                Price = 3,
+                Price = 2,
                 Description = "Belgian White Ale",
                 Image = "/images/Ales/shocktop.jpg"
             });
@@ -26,9 +26,45 @@ namespace BeerPack.Controllers
             {
                 ID = 2,
                 Name = "Goose Island 312",
-                Price = 3,
+                Price = 2,
                 Description = "Wheat Ale",
                 Image = "/images/Ales/gooseisland312.png"
+            });
+
+            ales.Add(new Ales
+            {
+                ID = 3,
+                Name = "Samual Adams Summer Ale",
+                Price = 2,
+                Description = "Summer Ale",
+                Image = "/images/Ales/beer_171.jpg"
+            });
+
+            ales.Add(new Ales
+            {
+                ID = 4,
+                Name = "Bells Best Brown Ale",
+                Price = 2,
+                Description = "Brown Ale",
+                Image = "/images/Ales/bells-best-brown-ale.jpg"
+            });
+
+            ales.Add(new Ales
+            {
+                ID = 5,
+                Name = "Kona Brewing Co. Big Wave",
+                Price = 2,
+                Description = "Golden Ale",
+                Image = "/images/Ales/kona-beer/png"
+            });
+
+            ales.Add(new Ales
+            {
+                ID = 6,
+                Name = "Shiner Bock Birthday Beer",
+                Price = 2,
+                Description = "Coffee Ale",
+                Image = "/images/Ales/SHiner-793x525.png"
             });
             return View(ales);
         }
@@ -49,7 +85,36 @@ namespace BeerPack.Controllers
                 ales.Description = "Wheat Ale";
                 ales.Price = 3;
                 ales.Image = "/images/Ales/gooseisland312.png";
-            }else
+            }
+            else if (id == 3)
+            {
+                ales.Name = "Samual Adams Summer Ale";
+                ales.Description = "Summer Ale";
+                ales.Price = 2;
+                ales.Image = "/images/Ales/beer_171.jpg"; 
+            }
+            else if (id == 4)
+            {
+                ales.Name = "Bells Best Brown Ale";
+                ales.Description = "Brown Ale";
+                ales.Price = 2;
+                ales.Image = "/images/Ales/bells-best-brown-ale.jpg";
+            }
+            else if (id == 5)
+            {
+                ales.Name = "Kona Brewing Co. Big Wave";
+                ales.Description = "Golden Ale";
+                ales.Price = 2;
+                ales.Image = "/images/Ales/kona-beer/png";
+            }
+            else if (id == 6)
+            {
+                ales.Name = "Shiner Bock Birthday Beer";
+                ales.Description = "Coffee Ale";
+                ales.Price = 2;
+                ales.Image = "/images/Ales/SHiner-793x525.png";
+            }
+            else
             {
                 return HttpNotFound("This product doesn't exist");
             }
