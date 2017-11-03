@@ -162,6 +162,7 @@
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IpaController.cs" />
+    <Compile Include="Controllers\LagerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -169,6 +170,7 @@
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CheckoutDetails.cs" />
     <Compile Include="Models\IPA.cs" />
+    <Compile Include="Models\Lagers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +270,8 @@
     <Content Include="Views\Checkout\Index.cshtml" />
     <Content Include="Views\Ipa\Index.cshtml" />
     <Content Include="Views\Ipa\List.cshtml" />
+    <Content Include="Views\Lager\Index.cshtml" />
+    <Content Include="Views\Lager\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

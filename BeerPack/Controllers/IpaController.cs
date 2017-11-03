@@ -43,9 +43,9 @@ namespace BeerPack.Controllers
                 ipa.Add(new IPA
                 {
                     ID = 4,
-                    Name = "Samual Adams Rebel IPA",
+                    Name = "Boston Brewing Co.",
                     Price = 2,
-                    Description = "Rebel IPA",
+                    Description = "Samual AdamsRebel IPA",
                     Image = "/images/IPA's/samualadamsipa.jpg"
                 });
 
@@ -95,8 +95,8 @@ namespace BeerPack.Controllers
                 }
                 else if (id == 4)
                 {
-                    ipa.Name = "Samual Adams Rebel IPA";
-                    ipa.Description = "Rebel IPA";
+                    ipa.Name = "Boston Brewing Co.";
+                    ipa.Description = "Samual Adams Rebel IPA";
                     ipa.Price = 2;
                     ipa.Image = "/images/Ipa's/samualadamsipa.jpg";
                 }
