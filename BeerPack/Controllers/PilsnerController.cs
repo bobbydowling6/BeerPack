@@ -12,6 +12,8 @@ namespace BeerPack.Controllers
         // GET: Lager
         public ActionResult List()
         {
+            ViewBag.Cart = Models.Cart.BuildCart(this.Request);
+
             List<Pilsners> pilsners = new List<Pilsners>();
             pilsners.Add(new Pilsners
             {
@@ -71,6 +73,8 @@ namespace BeerPack.Controllers
 
         public ActionResult Index(int id)
         {
+            ViewBag.Cart = Models.Cart.BuildCart(this.Request);
+
             var pilsners = new Models.Pilsners();
             if (id == 1)
             {
@@ -126,6 +130,8 @@ namespace BeerPack.Controllers
         [HttpPost]
         public ActionResult Index(Lagers model)
         {
+            ViewBag.Cart = Models.Cart.BuildCart(this.Request);
+
             HttpContext.Session.Add("productName", model.Name);
             HttpContext.Session.Add("productPrice", model.Price.ToString("C"));
             HttpContext.Session.Add("productQuantity", model.Quantity.ToString());
@@ -133,6 +139,8 @@ namespace BeerPack.Controllers
             Response.AppendCookie(new HttpCookie("productName", model.Name));
             Response.AppendCookie(new HttpCookie("productPrice", model.Price.ToString("C")));
             Response.AppendCookie(new HttpCookie("productQuantity", model.Quantity.ToString()));
+
+            TempData.Add("NewItem", model.Name);
 
             return RedirectToAction("Index", "Cart");
         }

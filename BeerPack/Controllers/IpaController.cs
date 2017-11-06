@@ -12,6 +12,7 @@ namespace BeerPack.Controllers
         // GET: Ipa
         public ActionResult List()
         {
+                ViewBag.Cart = Models.Cart.BuildCart(this.Request);
                 List<IPA> ipa = new List<IPA>();
                 ipa.Add(new IPA
                 {
@@ -71,6 +72,7 @@ namespace BeerPack.Controllers
            
             public ActionResult Index(int id)
             {
+                ViewBag.Cart = Models.Cart.BuildCart(this.Request);
                 var ipa = new Models.IPA();
                 if (id == 1)
                 {
@@ -126,6 +128,8 @@ namespace BeerPack.Controllers
             [HttpPost]
             public ActionResult Index(IPA model)
             {
+                ViewBag.Cart = Models.Cart.BuildCart(this.Request);
+
                 HttpContext.Session.Add("productName", model.Name);
                 HttpContext.Session.Add("productPrice", model.Price.ToString("C"));
                 HttpContext.Session.Add("productQuantity", model.Quantity.ToString());
@@ -134,6 +138,7 @@ namespace BeerPack.Controllers
                 Response.AppendCookie(new HttpCookie("productPrice", model.Price.ToString("C")));
                 Response.AppendCookie(new HttpCookie("productQuantity", model.Quantity.ToString()));
 
+            TempData.Add("NewItem", model.Name);
                 return RedirectToAction("Index", "Cart");
             }
         }

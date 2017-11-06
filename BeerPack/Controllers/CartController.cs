@@ -12,13 +12,15 @@ namespace BeerPack.Controllers
         public ActionResult Index()
         {
             var cart = Models.Cart.BuildCart(Request);
-
+            ViewBag.Cart = cart;
             return View(cart);
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(Models.Cart model)
         {
+            ViewBag.Cart = Models.Cart.BuildCart(this.Request);
             Response.AppendCookie(new HttpCookie("productQuantity", model.Products[0].Quantity.ToString()));
 
             model.SubTotal = model.Products.Sum(x => x.Price * x.Quantity);

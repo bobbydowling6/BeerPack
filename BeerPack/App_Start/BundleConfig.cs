@@ -26,6 +26,11 @@ namespace BeerPack
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angular", "https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js").Include(
+                    "~/Scripts/angular.js", "~/Scripts/angular-*"));
+
+            bundles.UseCdn = true;
         }
     }
 }

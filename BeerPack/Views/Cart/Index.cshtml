@@ -2,8 +2,17 @@
 @{
     ViewBag.Title = "Index";
 }
-@using (Html.BeginForm())
+@if (TempData.ContainsKey("NewItem"))
 {
+    <div class="alert alert-success">
+        @TempData["NewItem"].ToString() has been added to your cart
+    </div>
+}
+@if (Model.Products.Length > 0)
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
     <div class="jumbotron">
         <div class="container">
             <h2>Welcome To The Cart</h2>
@@ -62,4 +71,8 @@
             </div>
         </div>
             @Html.ActionLink("Check Out", "Index", "Checkout", null, new { @class = "btn btn-primary" })
-            }
+    }
+}
+else{
+    <p>Your cart is currently empty</p>
+}

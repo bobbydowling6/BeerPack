@@ -10,6 +10,8 @@ namespace BeerPack.Controllers
     {
         public ActionResult Index()
         {
+
+            ViewData["Cart"] = Models.Cart.BuildCart(this.Request);
             return View();
         }
 

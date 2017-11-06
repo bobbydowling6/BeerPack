@@ -11,6 +11,7 @@ namespace BeerPack.Controllers
         // GET: Checkout
         public ActionResult Index()
         {
+            ViewBag.Cart = Models.Cart.BuildCart(this.Request);
             Models.CheckoutDetails details = new Models.CheckoutDetails();
             details.CurrentCart = Models.Cart.BuildCart(Request);
 
@@ -22,7 +23,7 @@ namespace BeerPack.Controllers
         public ActionResult Index(Models.CheckoutDetails model)
         {
             model.CurrentCart = Models.Cart.BuildCart(Request);
-
+            ViewBag.Cart = model.CurrentCart;
             if (ModelState.IsValid)
             {
                 //TODO: Persist this order to the database
