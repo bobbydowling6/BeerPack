@@ -1,17 +1,47 @@
 ﻿@{
-    ViewBag.Title = "Contact";
+    ViewBag.Title = "Contact Us";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
-
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<main>
+    <div class="jumbotron">
+        <div class="container">
+            <div class="col-sm-9">
+            <h2>Contact Us</h2>
+            <p>Do you have any questions or concerns about our beer selection or your shopping experience? 
+            Here at BeerPack, our top priority is to make sure that you have the best shopping experience possible and we value your input.
+            We even take suggestions so that we can not only expand our beer selections but also being the goto place to try a new craft beer or two. 
+            Just fill out this form and we will contact you very shortly.</p>
+            </div>
+            <div class="col-sm-3">
+            <form>
+                <label for="firstName">First Name:</label>
+                <br />
+                <input type="text" name="firstName" />
+                <br />
+                <br />
+                <label for="lastName">Last Name:</label>
+                <br />
+                <input type="text" name="lastName" />
+                <br />
+                <br />
+                <label for="yourEmail">Email:</label>
+                <br />
+                <input type="email" name="yourEmail" />
+                <br />
+                <br />
+                <label for="yourPhone">Phone Number:</label>
+                <br />
+                <input type="tel" name="yourPhone" />
+                <br />
+                <br />
+                <label for="yourComments">Comments:</label>
+                <br />
+                <textarea placeholder="Write your comments here..."></textarea>
+                <br />
+                <br />
+                <input type="submit" />
+            </form>
+            </div>
+        </div>
+    </div>
+</main>
