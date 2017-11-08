@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeerPack", "BeerPack\BeerPack.csproj", "{B41859BE-1B31-4CCD-A1AB-9176EB3EF421}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BeerPackDatabase", "BeerPackDatabase\BeerPackDatabase.sqlproj", "{6449F38F-FA12-4526-A74C-D949E14F8CDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,12 @@ Global
 		{B41859BE-1B31-4CCD-A1AB-9176EB3EF421}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B41859BE-1B31-4CCD-A1AB-9176EB3EF421}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B41859BE-1B31-4CCD-A1AB-9176EB3EF421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6449F38F-FA12-4526-A74C-D949E14F8CDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6449F38F-FA12-4526-A74C-D949E14F8CDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6449F38F-FA12-4526-A74C-D949E14F8CDD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6449F38F-FA12-4526-A74C-D949E14F8CDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6449F38F-FA12-4526-A74C-D949E14F8CDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6449F38F-FA12-4526-A74C-D949E14F8CDD}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
