@@ -46,7 +46,7 @@ namespace BeerPack.Controllers
                     ID = 4,
                     Name = "Boston Brewing Co.",
                     Price = 2,
-                    Description = "Samual AdamsRebel IPA",
+                    Description = "Samual Adams Rebel IPA",
                     Image = "/images/IPA's/samualadamsipa.jpg"
                 });
 
