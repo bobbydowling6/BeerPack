@@ -9,6 +9,5 @@
 	[Image] NVARCHAR(1000),
 	[Quantity] int,
 	constraint pk_product primary key(BeerID), 
-	constraint fk_beer_ beerstyle foreign key(BeerStyle) references Style([ID])
 
 )

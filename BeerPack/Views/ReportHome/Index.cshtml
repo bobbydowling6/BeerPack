@@ -1,0 +1,47 @@
+﻿@model BeerPack.Models.SalesReportModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+<h1 style="color: white">This is a report page</h1>
+@using (Html.BeginForm())
+{
+    <input type="submit" value="Get Report" />
+    @Html.DropDownListFor(m => m.SelectedState, Model.States.Select(x => new SelectListItem { Value = x, Text = x }))
+    foreach (var topSale in Model.TopSalesByDollar)
+    {
+        <table style="background-color: white">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Sales</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@topSale.ProductID</td>
+                    <td>@topSale.TopSalesByDollar</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    
+    foreach (var topSale in Model.TopSalesByQuantity)
+    {
+        <table style="background-color: white">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@topSale.ProductID</td>
+                    <td>@topSale.Quantity</td>
+                </tr>
+            </tbody>
+        </table>
+       
+    }
+}

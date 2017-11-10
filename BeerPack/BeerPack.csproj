@@ -164,6 +164,7 @@
     <Compile Include="Controllers\IpaController.cs" />
     <Compile Include="Controllers\LagerController.cs" />
     <Compile Include="Controllers\PilsnerController.cs" />
+    <Compile Include="Controllers\ReportHomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -173,6 +174,7 @@
     <Compile Include="Models\IPA.cs" />
     <Compile Include="Models\Lagers.cs" />
     <Compile Include="Models\Pilsners.cs" />
+    <Compile Include="Models\SalesReportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +278,7 @@
     <Content Include="Views\Lager\List.cshtml" />
     <Content Include="Views\Pilsner\Index.cshtml" />
     <Content Include="Views\Pilsner\List.cshtml" />
+    <Content Include="Views\ReportHome\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
