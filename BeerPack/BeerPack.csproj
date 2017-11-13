@@ -164,14 +164,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AleController.cs" />
     <Compile Include="Controllers\BeerController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IpaController.cs" />
-    <Compile Include="Controllers\LagerController.cs" />
-    <Compile Include="Controllers\PilsnerController.cs" />
     <Compile Include="Controllers\ReportHomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -312,18 +308,9 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Beer\Contact.cshtml" />
-    <Content Include="Views\Ale\Index.cshtml" />
-    <Content Include="Views\Ale\List.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Checkout.cshtml" />
     <Content Include="Views\Checkout\Index.cshtml" />
-    <Content Include="Views\Ipa\Index.cshtml" />
-    <Content Include="Views\Ipa\List.cshtml" />
-    <Content Include="Views\Lager\Index.cshtml" />
-    <Content Include="Views\Lager\List.cshtml" />
-    <Content Include="Views\Pilsner\Index.cshtml" />
-    <Content Include="Views\Pilsner\List.cshtml" />
     <Content Include="Views\ReportHome\Index.cshtml" />
     <Content Include="Views\Beer\Index.cshtml" />
     <Content Include="Views\Beer\List.cshtml" />

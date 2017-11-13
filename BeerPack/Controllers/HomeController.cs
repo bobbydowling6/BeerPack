@@ -22,11 +22,18 @@ namespace BeerPack.Controllers
             return View();
         }
 
+
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Contact(string firstName, string lastName,
+            string yourEmail, int yourPhone, string yourComments)
+        {
+            return Content("Thanks for properly filling out this form, we will contact " +
+                "you very shortly to help answer all of your questions and concerns.");
         }
     }
 }

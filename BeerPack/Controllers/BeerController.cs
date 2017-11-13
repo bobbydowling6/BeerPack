@@ -22,10 +22,13 @@ namespace BeerPack.Controllers
         }
 
         // GET: Beer/List
-        public ActionResult List()
+        public ActionResult List(string id)
         {
-
-            return View(db.Beers);
+            if (string.IsNullOrEmpty(id))
+            {
+                return View(db.Beers);
+            }
+            return View(db.Beers.Where(x => x.Beer_Style == id));
         }
 
         // GET: Beer
@@ -35,17 +38,5 @@ namespace BeerPack.Controllers
             return View(db.Beers.Find(id));
         }
 
-        public ActionResult Contact()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Contact(string firstName, string lastName, 
-            string yourEmail, int yourPhone, string yourComments)
-        {
-            return Content("Thanks for properly filling out this form, we will contact " +
-                "you very shortly to help answer all of your questions and concerns.");
-        }
     }
 }

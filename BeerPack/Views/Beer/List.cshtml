@@ -4,64 +4,25 @@
     ViewBag.Title = "List";
 }
 
-<div class="well">
-    <h2>List</h2>
-    <br />
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Brand)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Beer_Style)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Image)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Quantity)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <h2>Ales</h2>
+            <br />
+            @foreach (var product in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Brand)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Beer_Style)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Image)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Quantity)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Details", "Index", new { id = item.BeerID })
-                    </td>
-                </tr>
-            }
+                <div class="col-xs-4">
+                    <div class="well">
+                        <h2>@product.Name</h2>
+                        <img class="img-circle img-responsive" src="@product.Image" />
+                        <p>@product.Description</p>
+                        <p>@((product.Price ?? 0).ToString("C"))</p>
+                        <input type="submit" class="btn btn-default" value="Add to Cart" />
 
-        </table>
+                    </div>
+                    @Html.ActionLink(product.Name, "Index", new { ID = product.BeerID })
+                </div>
+            }
+        </div>
     </div>
+</div>
