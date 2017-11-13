@@ -49,6 +49,12 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
@@ -86,6 +92,8 @@
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -169,6 +177,27 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Ales.cs" />
+    <Compile Include="Models\Beer.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BeerPackModels.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BeerPackModels.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BeerPackModels.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BeerPackModels.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BeerPackModels.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BeerStyle.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CheckoutDetails.cs" />
     <Compile Include="Models\IPA.cs" />
@@ -231,10 +260,27 @@
     <Content Include="images\Porters\Hofbrau winter spezial.png" />
     <Content Include="images\Porters\stone-smoked-porter-vanilla-bean.jpg" />
     <Content Include="images\Porters\Yuengling-Porter.jpg" />
+    <Content Include="Models\BeerPackModels.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BeerPackModels.Context.cs</LastGenOutput>
+      <DependentUpon>BeerPackModels.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\BeerPackModels.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>BeerPackModels.edmx</DependentUpon>
+      <LastGenOutput>BeerPackModels.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\angular.min.js.map" />
+    <EntityDeploy Include="Models\BeerPackModels.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>BeerPackModels.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\BeerPackModels.edmx.diagram">
+      <DependentUpon>BeerPackModels.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -279,6 +325,8 @@
     <Content Include="Views\Pilsner\Index.cshtml" />
     <Content Include="Views\Pilsner\List.cshtml" />
     <Content Include="Views\ReportHome\Index.cshtml" />
+    <Content Include="Views\Beer\Index.cshtml" />
+    <Content Include="Views\Beer\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -287,6 +335,9 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

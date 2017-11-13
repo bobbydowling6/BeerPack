@@ -4,16 +4,35 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace BeerPack.Controllers
 {
 
     public class BeerController : Controller
     {
-        // GET: Beer
-        public ActionResult Index(string id)
+        BeerPack.Models.BeerPackEntities db = new Models.BeerPackEntities();
+
+        protected override void Dispose(bool disposing)
         {
-            var model = new BeerPack.Models.Ales();
-            return Content(id);
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        // GET: Beer/List
+        public ActionResult List()
+        {
+
+            return View(db.Beers);
+        }
+
+        // GET: Beer
+        public ActionResult Index(int? id)
+        {
+            
+            return View(db.Beers.Find(id));
         }
 
         public ActionResult Contact()
