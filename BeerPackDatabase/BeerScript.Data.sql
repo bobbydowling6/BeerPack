@@ -26,7 +26,7 @@ insert into Beer ([Name], [Brand], [Beer Style], [Description], Price, Image)val
 ('Hop House 13 Lager', 'Guinness Ltd.', 'Lager', 'Euro Pale Lager', 2, '/images/Lagers/guinness-guinness-hop-house-13-lager_1478111845.png'),
 ('Eliot Ness Amber Lager', 'Great Lakes Brewing Co.', 'Lager', 'Amber Lager', 2, '/images/Lagers/Lager-Beer-Gear-Patrol-Great-Lakes.jpg'),
 ('Peroni Nastro Azzurro', 'Birra Peroni Industriale', 'Lager', 'Euro Pale Lager', 2, '/images/Lagers/peroni.jpg'),
-('Samual Adams Boston Lager', 'The Boston Beer Company', 'Lager', 'Boston Lager', 2, '/images/Lagers/samual adams.jp'),
+('Samual Adams Boston Lager', 'The Boston Beer Company', 'Lager', 'Boston Lager', 2, '/images/Lagers/samual adams.jpg'),
 ('Yuengling Traditional Lager', 'Yuengling Brewery', 'Lager', 'Amber/Red Lager', 2, '/images/Lagers/yuengling-lager-btl-single.png'),
 ('REV PILS', 'Revolution Brewing', 'Pilsner', 'German Pilsner', 2, '/images/Pilsners/brewingrevolutionpils .jpg'),
 ('Pivo Pils', 'Firestone Walker Brewing Co.', 'Pilsner', 'German Pilsner', 2, '/images/Pilsners/FirestonePils.jpg'),
