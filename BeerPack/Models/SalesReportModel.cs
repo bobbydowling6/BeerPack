@@ -16,12 +16,9 @@ namespace BeerPack.Models
 
     public class TopSaleByQuantity
     {
-        public int ProductID { get; set; }
-        //TODO: Add more properties
-        public string[] States { get; set; }
-        public int Quantity { get; set; }
-        public string StateAddress { get; set; }
-        public TopSaleByQuantity[] TopSalesByQuantity { get; set; }
+        public int TotalQuantity { get; set; }
+        public string ProductName { get; set; }
+        public int ProductID { get; set; } 
     }
 
     public class TopSaleByDollar

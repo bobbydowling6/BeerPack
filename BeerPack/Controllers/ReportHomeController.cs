@@ -8,6 +8,7 @@ using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Configuration;
 using BeerPack.Models;
+using System.Data.Common;
 
 namespace BeerPack.Reports.Controllers
 {
@@ -29,8 +30,8 @@ namespace BeerPack.Reports.Controllers
                 connection.Open();
 
                 //Commands are used to send a statement to SQL
-                SqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT DISTINCT StateProvince FROM Address INNER JOIN SalesOrderHeader ON Address.AddressID = SalesOrderHeader.BillToAddressID";
+                DbCommand quantityCommand = connection.CreateCommand();
+                quantityCommand.CommandText = "SELECT * FROM vw_BillingStates";
                 //If you're doing an update, delete, or insert, just send the query over:
                 //command.ExecuteNonQuery()   
 
@@ -39,7 +40,7 @@ namespace BeerPack.Reports.Controllers
 
                 //Use execute reader to read data in, record by record
                 List<string> states = new List<string>();
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (DbDataReader reader = quantityCommand.ExecuteReader())
                 {
 
                     while (reader.Read())
@@ -50,12 +51,12 @@ namespace BeerPack.Reports.Controllers
 
 
                 SqlCommand command1 = connection.CreateCommand();
-                command.CommandText = @"select top 5 ProductID, SUM(LineTotal) from salesorderdetail JOIN SalesOrderHeader
+                quantityCommand.CommandText = @"select top 5 ProductID, SUM(LineTotal) from salesorderdetail JOIN SalesOrderHeader
                                         ON SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesOrderID
                                         JOIN[Address] ON SalesOrderHeader.BillToAddressID = Address.AddressID
                                          WHERE Address.StateProvince = '" + selectedState + "' group by ProductID";
                 SqlCommand command2 = connection.CreateCommand();
-                command.CommandText = @"select top 5 ProductID, SUM(OrderQty) from salesorderdetail JOIN SalesOrderHeader 
+                quantityCommand.CommandText = @"select top 5 ProductID, SUM(OrderQty) from salesorderdetail JOIN SalesOrderHeader 
                                         ON SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesOrderID
                                         JOIN [Address] ON SalesOrderHeader.BillToAddressID = Address.AddressID
                                         WHERE Address.StateProvince = '" + selectedState + "' group by ProductID";
@@ -67,30 +68,43 @@ namespace BeerPack.Reports.Controllers
 
                     
 
-                    model.TopSalesByQuantity = new TopSaleByQuantity[0];
-                    SqlCommand quantityCommand = connection.CreateCommand();
-                    quantityCommand.CommandText =
-                    @"select top 5 ProductID, SUM(OrderQty) from salesorderdetail JOIN SalesOrderHeader
-                                        ON SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesOrderID
-                                        JOIN[Address] ON SalesOrderHeader.BillToAddressID = Address.AddressID
-                                         WHERE Address.StateProvince = '" + selectedState + "' group by ProductID order by sum(OrderQty) DESC";
+               
+                model.TopSalesByQuantity = new TopSaleByQuantity[0];
+                //Advantage of Stored Procedures : parameters cannot be used for SQL Injection attacks!
+                //Other advantage - SQL will cache the execution plan, as opposed to figuring it out each time you run dynamic T-SQL
+                quantityCommand.CommandText = "sp_TopSalesByQuantity";
+                quantityCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                quantityCommand.Parameters.Add(new SqlParameter("@stateProvince", selectedState));
 
-                    List<TopSaleByQuantity> quantity = new List<TopSaleByQuantity>();
-                    using (SqlDataReader quantityReader = quantityCommand.ExecuteReader())
+                List<TopSaleByQuantity> quantities = new List<TopSaleByQuantity>();
+                //Another advantage of stored procedures - they're securable! (meaning I have to explicitly grant access to this stored procedure to the SalesUser login)
+                //GRANT EXEC ON SalesLT.sp_TopSalesByQuantity TO SalesUser
+                using (DbDataReader reader = quantityCommand.ExecuteReader())
+                {
+                    int totalQuantityOrdinal = reader.GetOrdinal("TotalQuantity");
+                    int productNameOrdinal = reader.GetOrdinal("Name");
+                    int productIdOrdinal = reader.GetOrdinal("ProductID");
+
+                    while (reader.Read())
                     {
-                        while (quantityReader.Read())
+                        quantities.Add(new TopSaleByQuantity
                         {
-                            quantity.Add(new TopSaleByQuantity { ProductID = quantityReader.GetInt32(0), Quantity = quantityReader.GetInt32(1) });
-                        }
-                        model.TopSalesByQuantity = quantity.ToArray();
-                        //Make sure you close the connection when you're finished
-                        connection.Close();
+                            TotalQuantity = reader.GetInt32(totalQuantityOrdinal),
+                            ProductName = reader.GetString(productNameOrdinal),
+                            ProductID = reader.GetInt32(productIdOrdinal)
+                        });
+                    }
+                }
+
+                model.TopSalesByQuantity = quantities.ToArray();
+                //Make sure you close the connection when you're finished
+                connection.Close();
                     }
                     return View(model);
                 }
             }
         }
-    }
+    
 
 
     
