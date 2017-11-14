@@ -1,7 +1,6 @@
 body {
     background-image: url(/images/background%20image.jpg);
     background-repeat: no-repeat;
-    background-size: cover;
 }
 
 #wrapper {margin-left: auto;
