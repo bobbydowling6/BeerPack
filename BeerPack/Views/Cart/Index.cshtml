@@ -1,9 +1,9 @@
 ﻿@model BeerPack.Models.Cart
 @{
     ViewBag.Title = "Index";
-    var subTotal = Model.CartProducts.Sum(x => x.Product.Price * x.Quantity) ?? 0;
+    var subTotal = Model.CartProducts.Sum(x => x.Beer.Price * x.Quantity) ?? 0;
     var shippingAndHandling = Model.CartProducts.Sum(x => x.Quantity);
-    var tax = (Model.CartProducts.Sum(x => x.Product.Price * x.Quantity) ?? 0) * .1025m;
+    var tax = (Model.CartProducts.Sum(x => x.Beer.Price * x.Quantity) ?? 0) * .1025m;
 }
 @if (TempData.ContainsKey("NewItem"))
 {
@@ -35,19 +35,19 @@
                     {
                         <tr>
                             <td>
-                                @Model.CartProducts.ElementsAt[i].Name
-                            @Html.HiddenFor(m => m.Products[i].Name)
+                                @Model.CartProducts.ElementAt(i).Beer.Name
+                            @Html.HiddenFor(m => m.CartProducts.ElementAt(i).Beer.Name)
                         </td>
                         <td>
                             <input type="number" min="0" max="6" class="form-control"
-                                   value="@Model.CartProducts.ElementsAt[i].Quantity" name="@("Products[" + i + "].Quantity")" />
+                                   value="@Model.CartProducts [i].Beer.Quantity" name="@("Products[" + i + "].Quantity")" />
                         </td>
                         <td>
-                            @((Model.CartProducts.ElementsAt(i).Product.Price ?? 0).ToString("C"))
-                            @Html.HiddenFor(m => m.Products[i].Price)
+                            @((Model.CartProducts.ElementAt(i).Beer.Price ?? 0).ToString("C"))
+                            @Html.HiddenFor(m => m.CartProducts.ElementAt(i).Beer.Price)
                         </td>
                         <td>
-                            @((Model.CartProducts.ElementsAt(i).Quantity * Model.CartProducts.ElementsAt(i).Product.Price) ?? 0).ToString("C"))
+                            @((Model.CartProducts.ElementAt(i).Quantity * Model.CartProducts.ElementAt(i).Beer.Price) ?? 0).ToString("C"))
                     </td>
                 </tr>
                     }
