@@ -3,116 +3,121 @@
 @{
     ViewBag.Title = "Details";
 }
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <h2>Details</h2>
 
-<h2>Details</h2>
+            <div>
+                <h4>Order</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.TrackingNumber)
+                    </dt>
 
-<div>
-    <h4>Order</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.TrackingNumber)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.TrackingNumber)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TrackingNumber)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PurchaserName)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PurchaserName)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.PurchaserName)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.PurchaserName)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ShippingAddress1)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ShippingAddress1)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ShippingAddress1)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.ShippingAddress1)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ShippingCity)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ShippingCity)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ShippingCity)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.ShippingCity)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ShippingState)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ShippingState)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ShippingState)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.ShippingState)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ShippingPostalCode)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ShippingPostalCode)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ShippingPostalCode)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.ShippingPostalCode)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.SubTotal)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.SubTotal)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.SubTotal)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.SubTotal)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ShippingAndHandling)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ShippingAndHandling)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ShippingAndHandling)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.ShippingAndHandling)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Tax)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Tax)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Tax)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Tax)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DateCreated)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.DateCreated)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DateLastModified)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DateLastModified)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.DateLastModified)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.DateLastModified)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ShipDate)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ShipDate)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ShipDate)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.ShipDate)
-        </dd>
-
-    </dl>
+                </dl>
+            </div>
+        </div>
+    </div>
 </div>

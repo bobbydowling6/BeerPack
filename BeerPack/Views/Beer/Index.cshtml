@@ -8,11 +8,11 @@
         quantityOptions[i - 1] = new SelectListItem();
         if (i == 1)
         {
-            quantityOptions[i - 1].Text = i + "Beer";
+            quantityOptions[i - 1].Text = i + "" + Model.Name;
         }
         else
         {
-            quantityOptions[i - 1].Text = i + "Beers";
+            quantityOptions[i - 1].Text = i + "" + Model.Name + "s";
         }
         quantityOptions[i - 1].Value = i.ToString();
     }
@@ -29,7 +29,7 @@
             <p>@Model.Description</p>
             <p>@((Model.Price ?? 0).ToString("C"))</p>
 
-            @using (Html.BeginForm("Index", "Ale", FormMethod.Post, new { @class = "myClass" }))
+            @using (Html.BeginForm("Index", "Beer", FormMethod.Post, new { @class = "myClass" }))
             {
                 @Html.HiddenFor(m => m.BeerID)
                 @Html.HiddenFor(m => m.Name)
