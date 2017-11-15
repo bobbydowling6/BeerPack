@@ -22,7 +22,7 @@
                             <th>Item</th>
                             <th>Quantity</th>
                             <th>Price</th>
-                            <th>Item Total</th>
+                            <th>ItemTotal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,7 +40,7 @@
                                 <td>
                                     @((Model.CurrentCart.CartProducts.ElementAt(i).Beer.Price ?? 0).ToString("C"))
                                 </td>
-                                <td>@(((Model.CurrentCart.CartProducts.ElementAt(i).Quantity * Model.CurrentCart.CartProducts.ElementAt(i).Beer.Price) ?? 0).ToString("C")))</td>
+                                <td>@(((Model.CurrentCart.CartProducts.ElementAt(i).Quantity * Model.CurrentCart.CartProducts.ElementAt(i).Beer.Price) ?? 0).ToString("C"))</td>
                             </tr>
                         }
                     </tbody>
