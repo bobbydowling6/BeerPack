@@ -3,9 +3,9 @@
 @{
     ViewBag.Title = "Checkout";
 
-    var subTotal = Model.CurrentCart.CartProducts.Sum(x => x.Product.Price * x.Quantity) ?? 0;
+    var subTotal = Model.CurrentCart.CartProducts.Sum(x => x.Beer.Price * x.Quantity) ?? 0;
     var shippingAndHandling = Model.CurrentCart.CartProducts.Sum(x => x.Quantity);
-    var tax = (Model.CurrentCart.CartProducts.Sum(x => x.Product.Price * x.Quantity) ?? 0) * .1025m;
+    var tax = (Model.CurrentCart.CartProducts.Sum(x => x.Beer.Price * x.Quantity) ?? 0) * .1025m;
 }
 
 <div class="jumbotron">
@@ -31,7 +31,7 @@
                             <tr>
 
                                 <td>
-                                    @Model.CurrentCart.CartProducts.ElementAt(i).Product.Name
+                                    @Model.CurrentCart.CartProducts.ElementAt(i).Beer.Name
                                 </td>
                                 <td>
                                     @Model.CurrentCart.CartProducts.ElementAt(i).Quantity

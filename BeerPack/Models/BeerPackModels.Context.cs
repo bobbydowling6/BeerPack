@@ -27,7 +27,9 @@ namespace BeerPack.Models
     
         public virtual DbSet<Beer> Beers { get; set; }
         public virtual DbSet<BeerStyle> BeerStyles { get; set; }
-        public object Orders { get; internal set; }
-        public object Carts { get; internal set; }
+        public virtual DbSet<Cart> Carts { get; set; }
+        public virtual DbSet<CartProduct> CartProducts { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderProduct> OrderProducts { get; set; }
     }
 }

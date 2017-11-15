@@ -173,7 +173,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Ales.cs" />
     <Compile Include="Models\Beer.cs">
       <DependentUpon>BeerPackModels.tt</DependentUpon>
     </Compile>
@@ -195,14 +194,19 @@
     <Compile Include="Models\BeerStyle.cs">
       <DependentUpon>BeerPackModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Cart.cs" />
-    <Compile Include="Models\CartProduct.cs" />
+    <Compile Include="Models\Cart.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CartProduct.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckoutDetails.cs" />
-    <Compile Include="Models\IPA.cs" />
-    <Compile Include="Models\Lagers.cs" />
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\OrderProduct.cs" />
-    <Compile Include="Models\Pilsners.cs" />
+    <Compile Include="Models\Order.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderProduct.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SalesReportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

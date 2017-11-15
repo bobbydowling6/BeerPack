@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BeerPackModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BeerPackModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Beer">
           <Key>
             <PropertyRef Name="BeerID" />
@@ -27,12 +27,131 @@
           <Property Name="Style" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="ntext" />
         </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AspNetUserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateLastModified" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CartProduct">
+          <Key>
+            <PropertyRef Name="CartID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="CartID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateLastModified" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TrackingNumber" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="PurchaserName" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="ShippingAddress1" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ShippingCity" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ShippingState" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ShippingPostalCode" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="SubTotal" Type="money" Nullable="false" />
+          <Property Name="ShippingAndHandling" Type="money" Nullable="false" />
+          <Property Name="Tax" Type="money" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateLastModified" Type="datetime" Nullable="false" />
+          <Property Name="ShipDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OrderProduct">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="PlacedName" Type="nvarchar" MaxLength="100" />
+          <Property Name="PlacedUnitPrice" Type="money" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateLastModified" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CartProduct_Cart">
+          <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
+          <End Role="CartProduct" Type="Self.CartProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cart">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CartProduct">
+              <PropertyRef Name="CartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartProduct_Product">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="CartProduct" Type="Self.CartProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="CartProduct">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProduct_Beer">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="OrderProduct">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProduct_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderProduct">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="BeerPackModelStoreContainer">
           <EntitySet Name="Beer" EntityType="Self.Beer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BeerStyle" EntityType="Self.BeerStyle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CartProduct" EntityType="Self.CartProduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderProduct" EntityType="Self.OrderProduct" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CartProduct_Cart" Association="Self.FK_CartProduct_Cart">
+            <End Role="Cart" EntitySet="Cart" />
+            <End Role="CartProduct" EntitySet="CartProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartProduct_Product" Association="Self.FK_CartProduct_Product">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="CartProduct" EntitySet="CartProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProduct_Beer" Association="Self.FK_OrderProduct_Beer">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="OrderProduct" EntitySet="OrderProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProduct_Order" Association="Self.FK_OrderProduct_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderProduct" EntitySet="OrderProduct" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BeerPackModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -48,6 +167,8 @@
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Image" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Quantity" Type="Int32" />
+          <NavigationProperty Name="CartProducts" Relationship="BeerPackModel.FK_CartProduct_Product" FromRole="Beer" ToRole="CartProduct" />
+          <NavigationProperty Name="OrderProducts" Relationship="BeerPackModel.FK_OrderProduct_Beer" FromRole="Beer" ToRole="OrderProduct" />
         </EntityType>
         <EntityType Name="BeerStyle">
           <Key>
@@ -61,7 +182,133 @@
         <EntityContainer Name="BeerPackEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Beers" EntityType="Self.Beer" />
           <EntitySet Name="BeerStyles" EntityType="Self.BeerStyle" />
+          <EntitySet Name="Carts" EntityType="BeerPackModel.Cart" />
+          <EntitySet Name="CartProducts" EntityType="BeerPackModel.CartProduct" />
+          <EntitySet Name="Orders" EntityType="BeerPackModel.Order" />
+          <EntitySet Name="OrderProducts" EntityType="BeerPackModel.OrderProduct" />
+          <AssociationSet Name="FK_CartProduct_Product" Association="BeerPackModel.FK_CartProduct_Product">
+            <End Role="Beer" EntitySet="Beers" />
+            <End Role="CartProduct" EntitySet="CartProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProduct_Beer" Association="BeerPackModel.FK_OrderProduct_Beer">
+            <End Role="Beer" EntitySet="Beers" />
+            <End Role="OrderProduct" EntitySet="OrderProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartProduct_Cart" Association="BeerPackModel.FK_CartProduct_Cart">
+            <End Role="Cart" EntitySet="Carts" />
+            <End Role="CartProduct" EntitySet="CartProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProduct_Order" Association="BeerPackModel.FK_OrderProduct_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderProduct" EntitySet="OrderProducts" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="AspNetUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateLastModified" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="CartProducts" Relationship="BeerPackModel.FK_CartProduct_Cart" FromRole="Cart" ToRole="CartProduct" />
+        </EntityType>
+        <EntityType Name="CartProduct">
+          <Key>
+            <PropertyRef Name="CartID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="CartID" Type="Guid" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateLastModified" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Beer" Relationship="BeerPackModel.FK_CartProduct_Product" FromRole="CartProduct" ToRole="Beer" />
+          <NavigationProperty Name="Cart" Relationship="BeerPackModel.FK_CartProduct_Cart" FromRole="CartProduct" ToRole="Cart" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrackingNumber" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaserName" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="ShippingAddress1" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ShippingCity" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ShippingState" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ShippingPostalCode" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="SubTotal" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="ShippingAndHandling" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Tax" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateLastModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ShipDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OrderProducts" Relationship="BeerPackModel.FK_OrderProduct_Order" FromRole="Order" ToRole="OrderProduct" />
+        </EntityType>
+        <EntityType Name="OrderProduct">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="PlacedName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PlacedUnitPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateLastModified" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Beer" Relationship="BeerPackModel.FK_OrderProduct_Beer" FromRole="OrderProduct" ToRole="Beer" />
+          <NavigationProperty Name="Order" Relationship="BeerPackModel.FK_OrderProduct_Order" FromRole="OrderProduct" ToRole="Order" />
+        </EntityType>
+        <Association Name="FK_CartProduct_Product">
+          <End Type="BeerPackModel.Beer" Role="Beer" Multiplicity="1" />
+          <End Type="BeerPackModel.CartProduct" Role="CartProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="CartProduct">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProduct_Beer">
+          <End Type="BeerPackModel.Beer" Role="Beer" Multiplicity="1" />
+          <End Type="BeerPackModel.OrderProduct" Role="OrderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="OrderProduct">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartProduct_Cart">
+          <End Type="BeerPackModel.Cart" Role="Cart" Multiplicity="1" />
+          <End Type="BeerPackModel.CartProduct" Role="CartProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cart">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CartProduct">
+              <PropertyRef Name="CartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProduct_Order">
+          <End Type="BeerPackModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="BeerPackModel.OrderProduct" Role="OrderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderProduct">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -89,6 +336,60 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Style" ColumnName="Style" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="BeerPackModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="AspNetUserId" ColumnName="AspNetUserId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CartProducts">
+            <EntityTypeMapping TypeName="BeerPackModel.CartProduct">
+              <MappingFragment StoreEntitySet="CartProduct">
+                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="CartID" ColumnName="CartID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="BeerPackModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="ShipDate" ColumnName="ShipDate" />
+                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="ShippingAndHandling" ColumnName="ShippingAndHandling" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="ShippingPostalCode" ColumnName="ShippingPostalCode" />
+                <ScalarProperty Name="ShippingState" ColumnName="ShippingState" />
+                <ScalarProperty Name="ShippingCity" ColumnName="ShippingCity" />
+                <ScalarProperty Name="ShippingAddress1" ColumnName="ShippingAddress1" />
+                <ScalarProperty Name="PurchaserName" ColumnName="PurchaserName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderProducts">
+            <EntityTypeMapping TypeName="BeerPackModel.OrderProduct">
+              <MappingFragment StoreEntitySet="OrderProduct">
+                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="PlacedUnitPrice" ColumnName="PlacedUnitPrice" />
+                <ScalarProperty Name="PlacedName" ColumnName="PlacedName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

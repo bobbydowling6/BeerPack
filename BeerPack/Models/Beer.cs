@@ -14,6 +14,13 @@ namespace BeerPack.Models
     
     public partial class Beer
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Beer()
+        {
+            this.CartProducts = new HashSet<CartProduct>();
+            this.OrderProducts = new HashSet<OrderProduct>();
+        }
+    
         public int BeerID { get; set; }
         public string Name { get; set; }
         public string Brand { get; set; }
@@ -22,5 +29,10 @@ namespace BeerPack.Models
         public Nullable<decimal> Price { get; set; }
         public string Image { get; set; }
         public Nullable<int> Quantity { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CartProduct> CartProducts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

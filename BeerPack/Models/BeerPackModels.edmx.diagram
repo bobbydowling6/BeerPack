@@ -6,7 +6,15 @@
     <edmx:Diagrams>
       <Diagram DiagramId="b092c9163d8a4306923a478dcf171aa0" Name="Diagram1">
         <EntityTypeShape EntityType="BeerPackModel.Beer" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BeerPackModel.BeerStyle" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BeerPackModel.BeerStyle" Width="1.5" PointX="2.625" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BeerPackModel.Cart" Width="1.5" PointX="2.125" PointY="8.625" />
+        <EntityTypeShape EntityType="BeerPackModel.CartProduct" Width="1.5" PointX="4.375" PointY="0.875" />
+        <EntityTypeShape EntityType="BeerPackModel.Order" Width="1.5" PointX="4.125" PointY="11.75" />
+        <EntityTypeShape EntityType="BeerPackModel.OrderProduct" Width="1.5" PointX="6.375" PointY="4.625" />
+        <AssociationConnector Association="BeerPackModel.FK_CartProduct_Product" />
+        <AssociationConnector Association="BeerPackModel.FK_OrderProduct_Beer" />
+        <AssociationConnector Association="BeerPackModel.FK_CartProduct_Cart" />
+        <AssociationConnector Association="BeerPackModel.FK_OrderProduct_Order" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
