@@ -1,6 +1,9 @@
 ﻿@model BeerPack.Models.Cart
 @{
     ViewBag.Title = "Index";
+    var subTotal = Model.CartProducts.Sum(x => x.Product.Price * x.Quantity) ?? 0;
+    var shippingAndHandling = Model.CartProducts.Sum(x => x.Quantity);
+    var tax = (Model.CartProducts.Sum(x => x.Product.Price * x.Quantity) ?? 0) * .1025m;
 }
 @if (TempData.ContainsKey("NewItem"))
 {
@@ -8,10 +11,11 @@
         @TempData["NewItem"].ToString() has been added to your cart
     </div>
 }
-@if (Model.Products.Length > 0)
+@if (Model.CartProducts.Count > 0)
 {
     using (Html.BeginForm())
     {
+        @Html.HiddenFor(m => m.ID)
         @Html.AntiForgeryToken()
     <div class="jumbotron">
         <div class="container">
@@ -27,23 +31,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 0; i < Model.Products.Length; i++)
+                    @for (int i = 0; i < Model.CartProducts.Count; i++)
                     {
                         <tr>
                             <td>
-                                @Model.Products[i].Name
+                                @Model.CartProducts.ElementsAt[i].Name
                             @Html.HiddenFor(m => m.Products[i].Name)
                         </td>
                         <td>
                             <input type="number" min="0" max="6" class="form-control"
-                                   value="@Model.Products[i].Quantity" name="@("Products[" + i + "].Quantity")" />
+                                   value="@Model.CartProducts.ElementsAt[i].Quantity" name="@("Products[" + i + "].Quantity")" />
                         </td>
                         <td>
-                            @Model.Products[i].Price.ToString("C")
+                            @((Model.CartProducts.ElementsAt(i).Product.Price ?? 0).ToString("C"))
                             @Html.HiddenFor(m => m.Products[i].Price)
                         </td>
                         <td>
-                            @((Model.Products[i].Quantity * Model.Products[i].Price).ToString("C"))
+                            @((Model.CartProducts.ElementsAt(i).Quantity * Model.CartProducts.ElementsAt(i).Product.Price) ?? 0).ToString("C"))
                     </td>
                 </tr>
                     }
@@ -51,19 +55,19 @@
                 <tfoot>
                     <tr>
                         <th colspan="3">Subtotal</th>
-                        <th>@Model.SubTotal.ToString("C")</th>
+                        <th>@subTotal.ToString("C")</th>
                     </tr>
                     <tr>
                         <th colspan="3">Shipping and Handling</th>
-                        <th>@Model.ShippingAndHandling.ToString("C")</th>
+                        <th>@shippingAndHandling.ToString("C")</th>
                     </tr>
                     <tr>
                         <th colspan="3">Tax</th>
-                        <th>@Model.Tax.ToString("C")</th>
+                        <th>@tax.ToString("C")</th>
                     </tr>
                     <tr>
                         <th colspan="3">Total</th>
-                        <th>@Model.Total.ToString("C")</th>
+                        <th>@((tax + subTotal + shippingAndHandling).ToString("C"))</th>
                     </tr>
                 </tfoot>
             </table>
