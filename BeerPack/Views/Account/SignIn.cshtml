@@ -9,6 +9,10 @@
         <div>Error: @s</div>
     }
 }
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
 @using (Html.BeginForm())
 {
     <div class="jumbotron">
@@ -25,8 +29,11 @@
                 <input name="password" type="password" placeholder="Password"/>
             </div>
             <br />
+            <div>
+                <label for="staySignedIn">Stay Signed In</label>
+                <input name="staySignedIn" type="checkbox" />
+            </div>
             <input type="submit" value="Log In" class="btn btn-primary" />
-            <br />
             <div>
                 @Html.ActionLink("Recover your password", "ForgotPassword")
             </div>
