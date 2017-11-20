@@ -61,6 +61,14 @@ namespace BeerPack.Controllers
 
                 db.SaveChanges();
                 //TODO: send some confirmation emails to the person placing the order and the system admin
+                BeerPackEmailService emailService = new BeerPackEmailService();
+                emailService.SendAsync(new Microsoft.AspNet.Identity.IdentityMessage
+                {
+                    Subject = "Your Receipt for order " + trackingNumber,
+                    Destination = model.ContactEmail,
+                    Body = "Thank you for shopping with us"
+                });
+
                 //TODO: Reset the cart
                 return RedirectToAction("Index", "Receipt", new { id = trackingNumber });
             }

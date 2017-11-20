@@ -1,8 +1,8 @@
-﻿
-@{
-    ViewBag.Title = "Register";
-}
+﻿@{
 
+    ViewBag.Title = "Sign In";
+
+}
 @if (ViewBag.Error != null)
 {
     foreach (string s in (IEnumerable<string>)ViewBag.Error)
@@ -12,20 +12,26 @@
 }
 @using (Html.BeginForm())
 {
-    <div class="jumbotron">
-        <div class="container">
-            <div>
-                <label for="username">Username:</label>
-                <input name="username" type="text" placeholder="Email Address" />
-            </div>
-            <br />
-            <div>
-                <label for="password">Password:</label>
-                <input name="password" type="password" placeholder="Password" />
-            </div>
-            <br />
-            <input type="submit" value="Create Account" class="btn btn-primary" />
-       </div>
+    <div>
+        <label for="username">Username</label>
+        <input name="username" type="text" />
     </div>
-}
 
+    <div>
+        <label for="password">Password</label>
+        <input name="password" type="password" />
+    </div>
+    <div>
+        <label for="staySignedIn">Stay Signed In</label>
+        <input name="staySignedIn" type="checkbox" />
+    </div>
+    <input type="submit" value="Login" />
+}
+<div>
+    <div>
+        @Html.ActionLink("Register for a new account", "Register")
+    </div>
+    <div>
+        @Html.ActionLink("Recover your password", "ForgotPassword")
+    </div>
+</div>

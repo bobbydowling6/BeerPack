@@ -113,6 +113,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="SendGrid, Version=9.8.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sendgrid.9.9.0\lib\net452\SendGrid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -191,6 +194,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BeerPackEmailService.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BeerController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -268,12 +272,12 @@
     <Content Include="images\Ales\SHiner-793x525.png" />
     <Content Include="images\Ales\shocktop.jpg" />
     <Content Include="images\background image.jpg" />
-    <Content Include="images\IPA%27s\firestoneipa.jpg" />
-    <Content Include="images\IPA%27s\gooseislandipa.jpg" />
-    <Content Include="images\IPA%27s\Lagunitas.jpg" />
-    <Content Include="images\IPA%27s\samualadamsipa.jpg" />
-    <Content Include="images\IPA%27s\sierranevada.jpg" />
-    <Content Include="images\IPA%27s\voodoo-ranger-by-new-belgium-brewing-co.jpg" />
+    <Content Include="images\IPAs\firestoneipa.jpg" />
+    <Content Include="images\IPAs\gooseislandipa.jpg" />
+    <Content Include="images\IPAs\Lagunitas.jpg" />
+    <Content Include="images\IPAs\samualadamsipa.jpg" />
+    <Content Include="images\IPAs\sierranevada.jpg" />
+    <Content Include="images\IPAs\voodoo-ranger-by-new-belgium-brewing-co.jpg" />
     <Content Include="images\Lagers\beer-longboard-lager.jpg" />
     <Content Include="images\Lagers\guinness-guinness-hop-house-13-lager_1478111845.png" />
     <Content Include="images\Lagers\Lager-Beer-Gear-Patrol-Great-Lakes.jpg" />
@@ -352,7 +356,11 @@
     <Content Include="Views\Beer\List.cshtml" />
     <Content Include="Views\Receipt\Index.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Account\SignIn.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordSent.cshtml" />
+    <Content Include="appSettings.config" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

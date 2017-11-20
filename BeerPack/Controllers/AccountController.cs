@@ -11,13 +11,7 @@ namespace BeerPack.Controllers
 {
     public class AccountController : Controller
     {
-        public UserManager<IdentityUser> UserManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().GetUserManager<UserManager<IdentityUser>>();
-            }
-        }
+      
         // GET: Account
         public ActionResult Index()
         {
@@ -27,17 +21,6 @@ namespace BeerPack.Controllers
         public ActionResult Register()
         {
             return View();
-        }
-
-        public ActionResult LogOn()
-        {
-            HttpContext.GetOwinContext().Authentication.SignIn();
-            return View();
-        }
-        public ActionResult LogOff()
-        {
-            HttpContext.GetOwinContext().Authentication.SignOut();
-            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -64,6 +47,91 @@ namespace BeerPack.Controllers
             }
             ViewBag.Error = result.Errors;
             return View();
+            
+        }
+        public ActionResult SignOut()
+        {
+            HttpContext.GetOwinContext().Authentication.SignOut();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult SignIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SignIn(string userName, string password, bool? staySignedIn)
+        {
+            var userManager = HttpContext.GetOwinContext().GetUserManager<UserManager<IdentityUser>>();
+            var user = userManager.FindByName(userName);
+            if (user != null)
+            {
+                bool isPasswordValid = userManager.CheckPassword(user, password);
+                if (isPasswordValid)
+                {
+                    var claimsIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+                    HttpContext.GetOwinContext().Authentication.SignIn(new Microsoft.Owin.Security.AuthenticationProperties
+                    {
+                        IsPersistent = staySignedIn ?? false,
+                        ExpiresUtc = DateTime.UtcNow.AddDays(7)
+                    }, claimsIdentity);
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            ViewBag.Error = new string[] { "Unable to sign in" };
+            return View();
+        }
+
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ForgotPassword(string email)
+        {
+            var userManager = HttpContext.GetOwinContext().GetUserManager<UserManager<IdentityUser>>();
+            var user = userManager.FindByEmail(email);
+            if (user != null)
+            {
+                string resetToken = userManager.GeneratePasswordResetToken(user.Id);
+                string resetUrl = Request.Url.GetLeftPart(UriPartial.Authority) + "Account/ResetPassword?email=" + email + "&token=" + resetToken;
+                string message = string.Format("<a href=\"{0}\">Reset your password</a>", resetUrl);
+                userManager.SendEmail(user.Id, "your password reset token", resetToken);
+            }
+
+            return RedirectToAction("ForgotPasswordSent");
+        }
+
+        public ActionResult ForgotPasswordSent()
+        {
+            return View();
+        }
+
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(string email, string token, string newPassword)
+        {
+            var userManager = HttpContext.GetOwinContext().GetUserManager<UserManager<IdentityUser>>();
+            var user = userManager.FindByEmail(email);
+            if (user != null)
+            {
+                IdentityResult result = userManager.ResetPassword(user.Id, token, newPassword);
+                if (result.Succeeded)
+                {
+                    TempData["Message"] = "Your password has been updated successfully";
+                    return RedirectToAction("Account", "SignIn");
+                }
+
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }
+

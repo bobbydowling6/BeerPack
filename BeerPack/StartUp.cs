@@ -18,7 +18,7 @@ namespace BeerPack
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new Microsoft.Owin.PathString("/Account/LogOn")
+                LoginPath = new Microsoft.Owin.PathString("/Account/SignIn")
             });
 
             app.CreatePerOwinContext(() =>
@@ -34,6 +34,8 @@ namespace BeerPack
                     RequireLowercase = false,
                     RequireNonLetterOrDigit = false
                 };
+                manager.EmailService = new BeerPackEmailService();
+
                 return manager;
             });
         }
