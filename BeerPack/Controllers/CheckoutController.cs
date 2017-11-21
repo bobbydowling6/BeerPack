@@ -29,30 +29,9 @@ namespace BeerPack.Controllers
             Guid cartID = Guid.Parse(Request.Cookies["cartID"].Value);
 
             details.CurrentCart = db.Carts.Find(cartID);
-
-            return View(details);
-        }
-
-        // POST: Checkout
-        [HttpPost]
-        public ActionResult Index(Models.CheckoutDetails model)
-        {
-
-
-            //model.CurrentCart = Models.Cart.BuildCart(Request);
-            Guid cartID = Guid.Parse(Request.Cookies["cartID"].Value);
-
-            model.CurrentCart = db.Carts.Find(cartID);
-
-            if (ModelState.IsValid)
+            details.Addresses = new Braintree.Address[0];
+            if (User.Identity.IsAuthenticated)
             {
-                string trackingNumber = Guid.NewGuid().ToString().Substring(0, 8);
-                decimal tax = (model.CurrentCart.CartProducts.Sum(x => x.Beer.Price * x.Quantity) ?? 0) * .1025m;
-                decimal subtotal = model.CurrentCart.CartProducts.Sum(x => x.Beer.Price * x.Quantity) ?? 0;
-                decimal shipping = model.CurrentCart.CartProducts.Sum(x => x.Quantity);
-                decimal total = subtotal + tax + shipping;
-
-                #region pay for order
                 string merchantId = System.Configuration.ConfigurationManager.AppSettings["Braintree.MerchantId"];
                 string environment = System.Configuration.ConfigurationManager.AppSettings["Braintree.Environment"];
                 string publicKey = System.Configuration.ConfigurationManager.AppSettings["Braintree.PublicKey"];
@@ -69,34 +48,45 @@ namespace BeerPack.Controllers
                     Braintree.CustomerRequest newCustomer = new Braintree.CustomerRequest();
                     newCustomer.Email = User.Identity.Name;
 
-                    var r = customerGateway.Create(newCustomer);
-                    customer = r.Target;
+                    var result = customerGateway.Create(newCustomer);
+                    customer = result.Target;
                 }
                 else
                 {
                     customer = matchedCustomers.FirstItem;
                 }
 
-                Braintree.TransactionRequest transaction = new Braintree.TransactionRequest();
-                //transaction.Amount = 1m;    //I can hard-code a dollar amount for now to test everything else
-                transaction.Amount = total;
-                transaction.TaxAmount = tax;
-                transaction.OrderId = trackingNumber;
-                transaction.CustomerId = customer.Id;
-                //https://developers.braintreepayments.com/reference/general/testing/ruby
-                transaction.CreditCard = new Braintree.TransactionCreditCardRequest
-                {
-                    CardholderName = model.CardholderName,
-                    CVV = model.CVV,
-                    Number = model.CreditCardNumber,
-                    ExpirationYear = model.ExpirationYear,
-                    ExpirationMonth = model.ExpirationMonth
-                };
+                details.Addresses = customer.Addresses;
+            }
+            return View(details);
+        }
 
-                var result = gateway.Transaction.Sale(transaction);
+        // POST: Checkout
+        [HttpPost]
+        public ActionResult Index(Models.CheckoutDetails model, string addressId)
+        {
+
+
+            //model.CurrentCart = Models.Cart.BuildCart(Request);
+            Guid cartID = Guid.Parse(Request.Cookies["cartID"].Value);
+
+            model.CurrentCart = db.Carts.Find(cartID);
+            model.Addresses = new Braintree.Address[0];
+            if (ModelState.IsValid)
+            {
+                string trackingNumber = Guid.NewGuid().ToString().Substring(0, 8);
+                decimal tax = (model.CurrentCart.CartProducts.Sum(x => x.Beer.Price * x.Quantity) ?? 0) * .1025m;
+                decimal subtotal = model.CurrentCart.CartProducts.Sum(x => x.Beer.Price * x.Quantity) ?? 0;
+                decimal shipping = model.CurrentCart.CartProducts.Sum(x => x.Quantity);
+                decimal total = subtotal + tax + shipping;
+
+                #region pay for order
+                BeerPackPaymentService payments = new BeerPackPaymentService();
+                string email = User.Identity.IsAuthenticated ? User.Identity.Name : model.ContactEmail;
+                string message = payments.AuthorizeCard(email, total, tax, trackingNumber, addressId, model.CardholderName, model.CVV, model.CreditCardNumber, model.ExpirationMonth, model.ExpirationYear);
                 #endregion
                 #region save order
-                if (string.IsNullOrEmpty(result.Message))
+                if (string.IsNullOrEmpty(message))
                 {
                     Order o = new Order
                     {
@@ -138,7 +128,7 @@ namespace BeerPack.Controllers
                     #endregion
                     return RedirectToAction("Index", "Receipt", new { id = trackingNumber });
                 }
-                ModelState.AddModelError("CreditCardNumber", result.Message);
+                ModelState.AddModelError("CreditCardNumber", message);
             }
             return View(model);
         }

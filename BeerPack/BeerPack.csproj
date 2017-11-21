@@ -199,6 +199,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BeerPackEmailService.cs" />
+    <Compile Include="BeerPackPaymentService.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BeerController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -366,6 +367,7 @@
     <Content Include="appSettings.config" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\Addresses.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

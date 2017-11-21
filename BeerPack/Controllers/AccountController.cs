@@ -11,60 +11,51 @@ namespace BeerPack.Controllers
 {
     public class AccountController : Controller
     {
-      
+
+        BeerPackPaymentService beerpackPaymentService = new BeerPackPaymentService();
         // GET: Account
+        [Authorize]
         public ActionResult Index()
         {
-            if(User.Identity.IsAuthenticated == false)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            string merchantId = System.Configuration.ConfigurationManager.AppSettings["Braintree.MerchantId"];
-            string environment = System.Configuration.ConfigurationManager.AppSettings["Braintree.Environment"];
-            string publicKey = System.Configuration.ConfigurationManager.AppSettings["Braintree.PublicKey"];
-            string privateKey = System.Configuration.ConfigurationManager.AppSettings["Braintree.PrivateKey"];
-            Braintree.BraintreeGateway gateway = new Braintree.BraintreeGateway(environment, merchantId, publicKey, privateKey);
-
-            var customerGateway = gateway.Customer;
-            Braintree.CustomerSearchRequest query = new Braintree.CustomerSearchRequest();
-            query.Email.Is(User.Identity.Name);
-            var matchedCustomers = customerGateway.Search(query);
-            Braintree.Customer customer = null;
-            if (matchedCustomers.Ids.Count == 0)
-            {
-                Braintree.CustomerRequest newCustomer = new Braintree.CustomerRequest();
-                newCustomer.Email = User.Identity.Name;
-
-                var result = customerGateway.Create(newCustomer);
-                customer = result.Target;
-            }
-            else
-            {
-                customer = matchedCustomers.FirstItem;
-            }
-            return View(customer);
+            var customer = beerpackPaymentService.GetCustomer(User.Identity.Name);
+            return View(customer);    
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Index(string firstName, string lastName, string id)
         {
-            if (User.Identity.IsAuthenticated == false)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            string merchantId = System.Configuration.ConfigurationManager.AppSettings["Braintree.MerchantId"];
-            string environment = System.Configuration.ConfigurationManager.AppSettings["Braintree.Environment"];
-            string publicKey = System.Configuration.ConfigurationManager.AppSettings["Braintree.PublicKey"];
-            string privateKey = System.Configuration.ConfigurationManager.AppSettings["Braintree.PrivateKey"];
-            Braintree.BraintreeGateway gateway = new Braintree.BraintreeGateway(environment, merchantId, publicKey, privateKey);
-
-            var customerGateway = gateway.Customer;
-            Braintree.CustomerRequest request = new Braintree.CustomerRequest();
-            request.FirstName = firstName;
-            request.LastName = lastName;
-            var result = customerGateway.Update(id, request);
+            Braintree.Customer customer = beerpackPaymentService.UpdateCustomer(firstName, lastName, id);
             ViewBag.Message = "Updated Successfully";
-            return View(result.Target);
+
+            return View(customer);
+        }
+
+        [Authorize]
+        public ActionResult Addresses()
+        {
+            var customer = beerpackPaymentService.GetCustomer(User.Identity.Name);
+            return View(customer.Addresses);
+        }
+
+        [Authorize]
+        public ActionResult DeleteAddress(string id)
+        {
+            beerpackPaymentService.DeleteAddress(User.Identity.Name, id);
+            TempData["SuccessMessage"] = "Address deleted successfully";
+            return RedirectToAction("Addresses");
+
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AddAddress(string firstName, string lastName, string company, string streetAddress, string extendedAddress, string locality, string region, string postalCode, string countryName)
+        {
+
+            beerpackPaymentService.AddAddress(User.Identity.Name, firstName, lastName, company, streetAddress, extendedAddress, locality, region, postalCode, countryName);
+
+            TempData["SuccessMessage"] = "Address added successfully";
+            return RedirectToAction("Addresses");
         }
 
         public ActionResult Register()

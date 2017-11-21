@@ -19,6 +19,10 @@
             Value = (DateTime.Now.Year + i).ToString()
         });
     }
+    if (User.Identity.IsAuthenticated)
+    {
+        Model.ContactEmail = User.Identity.Name;
+    }
 }
 <div class="jumbotron">
     <div class="container">
@@ -76,49 +80,75 @@
                     </tfoot>
                 </table>
             </div>
+            </div>
 
             <div class="col-xs-12 col-sm-6">
                 @using (Html.BeginForm())
                 {
-                    @*<div class="alert alert-danger">
-                        @Html.ValidationSummary(false)
-                    </div>*@
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.ContactName, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.ContactName, new { @class = "form-control", placeholder = "Your Name" })
-                        @Html.ValidationMessageFor(m => m.ContactName)
-                    </div>
+                    if (!(ViewData.ModelState.IsValid))
+                    {
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
 
                     <div class="form-group">
+
                         @Html.LabelFor(m => m.ContactEmail, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.ContactEmail, new { @class = "form-control", placeholder = "Your Email Address" })
+                        @if (User.Identity.IsAuthenticated)
+                {
+                            @Html.TextBoxFor(m => m.ContactEmail, new { @class = "form-control", placeholder = "Your Email Address", disabled = "disabled" })
+                            @Html.HiddenFor(m => m.ContactEmail)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.ContactEmail, new { @class = "form-control", placeholder = "Your Email Address" })
+                        }
                         @Html.ValidationMessageFor(m => m.ContactEmail)
                     </div>
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="form-group">
+                            <label for="addressId">Choose an address</label>
+                            <select name="addressId" id="addressId" class="form-control">
+                                <option value="">New Address</option>
+                                @foreach (var address in Model.Addresses)
+                                {
+                                    <option value="@address.Id">@address.FirstName @address.LastName @address.StreetAddress @address.ExtendedAddress @address.Locality @address.Region @address.PostalCode @address.CountryCodeAlpha2</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    <div id="newAddress">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ContactName, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.ContactName, new { @class = "form-control", placeholder = "Your Name" })
+                            @Html.ValidationMessageFor(m => m.ContactName)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ShippingAddress, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.ShippingAddress, new { @class = "form-control", placeholder = "Address" })
+                            @Html.ValidationMessageFor(m => m.ShippingAddress)
+                        </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.ShippingAddress, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.ShippingAddress, new { @class = "form-control", placeholder = "Address" })
-                        @Html.ValidationMessageFor(m => m.ShippingAddress)
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ShippingCity, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.ShippingCity, new { @class = "form-control", placeholder = "City" })
+                            @Html.ValidationMessageFor(m => m.ShippingCity)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ShippingState, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.ShippingState, new { @class = "form-control", placeholder = "State" })
+                            @Html.ValidationMessageFor(m => m.ShippingState)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ShippingPostalCode, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.ShippingPostalCode, new { @class = "form-control", placeholder = "Zip Code" })
+                            @Html.ValidationMessageFor(m => m.ShippingPostalCode)
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.ShippingCity, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.ShippingCity, new { @class = "form-control", placeholder = "City" })
-                        @Html.ValidationMessageFor(m => m.ShippingCity)
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.ShippingState, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.ShippingState, new { @class = "form-control", placeholder = "State" })
-                        @Html.ValidationMessageFor(m => m.ShippingState)
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.ShippingPostalCode, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.ShippingPostalCode, new { @class = "form-control", placeholder = "Zip Code" })
-                        @Html.ValidationMessageFor(m => m.ShippingPostalCode)
-                    </div>
-
                     <div class="form-group">
                         @Html.LabelFor(m => m.CreditCardNumber, new { @class = "control-label" })
                         @Html.TextBoxFor(m => m.CreditCardNumber, new { @class = "form-control", placeholder = "4111111111111111" })
@@ -126,7 +156,7 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(m => m.CardholderName, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.CardholderName, new { @class = "form-control", placeholder = "Bob Cardholder" })
+                        @Html.TextBoxFor(m => m.CardholderName, new { @class = "form-control", placeholder = "Joe Cardholder" })
                         @Html.ValidationMessageFor(m => m.CardholderName)
                     </div>
                     <div class="form-group">
@@ -144,10 +174,45 @@
 
                     <input type="submit" class="btn btn-primary" />
                 }
+              </div>
             </div>
         </div>
-        </div>
-    </div>
         @section Scripts{
             @Scripts.Render("~/bundles/jqueryval")
+            <script type="text/javascript">
+        $("document").ready(function () {
+            $("#addressId").change(this, function () {
+                $("#newAddress .form-control[name=ContactName]").val("");
+                $("#newAddress .form-control[name=ShippingAddress]").val("");
+                $("#newAddress .form-control[name=ShippingCity]").val("");
+                $("#newAddress .form-control[name=ShippingState]").val("");
+                $("#newAddress .form-control[name=ShippingPostalCode]").val("");
+                var addressId = $("#addressId").val();
+                if (addressId !== "") {
+                    var selectedAddress;
+                    for (var i = 0; i < addresses.length; i++) {
+                        if (addresses[i].Id == addressId) {
+                            selectedAddress = addresses[i];
+                            break;
+                        }
+                    }
+                    $("#newAddress .form-control[name=ContactName]").val(selectedAddress.FirstName + " " + selectedAddress.LastName);
+                    if (selectedAddress.ExtendedAddress !== null) {
+                        $("#newAddress .form-control[name=ShippingAddress]").val(selectedAddress.StreetAddress + " " + selectedAddress.ExtendedAddress);
+                    } else {
+                        $("#newAddress .form-control[name=ShippingAddress]").val(selectedAddress.StreetAddress);
+                    }
+
+                    $("#newAddress .form-control[name=ShippingCity]").val(selectedAddress.Locality);
+                    $("#newAddress .form-control[name=ShippingState]").val(selectedAddress.Region);
+                    $("#newAddress .form-control[name=ShippingPostalCode]").val(selectedAddress.PostalCode);
+                    
+                }
+                
+            });
+        })
+
+        var addresses = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Addresses))');
+            </script>
         }
+
