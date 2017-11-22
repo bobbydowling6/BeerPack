@@ -7,20 +7,20 @@
 <div class="jumbotron">
     <div class="container">
         <div class="row">
-            <h2>Ales</h2>
+            <h2>Craft Beers</h2>
             <br />
             @foreach (var product in Model)
             {
-                <div class="col-xs-4">
+                <div class="col-xs-3">
                     <div class="well">
                         <h2>@product.Name</h2>
                         <img class="img-circle img-responsive" src="@product.Image" />
                         <p>@product.Description</p>
-                        <p>@((product.Price ?? 0).ToString("C"))</p>
-                        <input type="submit" class="btn btn-default" value="Add to Cart" />
-
+                        <p>@((product.Price ?? 0).ToString("C"))</p>                       
+                        <div>
+                        <button> @Html.ActionLink(product.Name, "Index", new { ID = product.BeerID })</button>
+                        </div>
                     </div>
-                    @Html.ActionLink(product.Name, "Index", new { ID = product.BeerID })
                 </div>
             }
         </div>

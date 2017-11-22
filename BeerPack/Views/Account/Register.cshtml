@@ -12,26 +12,36 @@
 }
 @using (Html.BeginForm())
 {
-    <div>
-        <label for="username">Username</label>
-        <input name="username" type="text" />
-    </div>
-
-    <div>
-        <label for="password">Password</label>
-        <input name="password" type="password" />
-    </div>
-    <div>
-        <label for="staySignedIn">Stay Signed In</label>
-        <input name="staySignedIn" type="checkbox" />
-    </div>
-    <input type="submit" value="Login" />
-}
-<div>
-    <div>
-        @Html.ActionLink("Register for a new account", "Register")
-    </div>
-    <div>
-        @Html.ActionLink("Recover your password", "ForgotPassword")
-    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <div class="row">
+            <div class="col-xs-6">
+            <div>
+                <label for="username">Username</label>
+                <input name="username" type="text" />
+            </div>           
+            <div>
+                <label for="password">Password</label>
+                <input name="password" type="password" />
+            </div>
+            <br />
+            <div>
+                <label for="staySignedIn">Stay Signed In</label>
+                <input name="staySignedIn" type="checkbox" />
+            </div>
+            <br />
+            <input type="submit" value="Login" class="btn btn-primary" />            
+            <div>
+                <br />
+                <div>
+                    @Html.ActionLink("Recover your password", "ForgotPassword")
+                </div>
+                </div>
+                </div>
+                <div class="col-xs-6">
+                    <img src="~/images/BeerPack.jpg" height="200" width="200"/>
+                </div>
+            </div>
+            </div>
 </div>
+}
