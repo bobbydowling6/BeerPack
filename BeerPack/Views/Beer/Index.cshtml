@@ -8,11 +8,11 @@
         quantityOptions[i - 1] = new SelectListItem();
         if (i == 1)
         {
-            quantityOptions[i - 1].Text = i + "" + Model.Name;
+            quantityOptions[i - 1].Text = i + " " + Model.Name;
         }
         else
         {
-            quantityOptions[i - 1].Text = i + "" + Model.Name + "s";
+            quantityOptions[i - 1].Text = i + " " + Model.Name + "s";
         }
         quantityOptions[i - 1].Value = i.ToString();
     }
