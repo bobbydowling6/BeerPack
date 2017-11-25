@@ -26,6 +26,11 @@ namespace BeerPack.Controllers
             return View();
         }
 
+        public ActionResult Giftsets()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult Contact(string firstName, string lastName,
             string yourEmail, int yourPhone, string yourComments)
