@@ -26,7 +26,7 @@ namespace BeerPack.Controllers
             return View();
         }
 
-        public ActionResult Giftsets()
+        public ActionResult Beerbaskets()
         {
             return View();
         }
