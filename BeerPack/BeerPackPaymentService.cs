@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Braintree;
+using System.Threading.Tasks;
 
 namespace BeerPack
 {
@@ -19,20 +20,20 @@ namespace BeerPack
 
         }
 
-        public Braintree.Customer GetCustomer(string email)
+        public async Task<Braintree.Customer> GetCustomer(string email)
         {
 
             var customerGateway = gateway.Customer;
             Braintree.CustomerSearchRequest query = new Braintree.CustomerSearchRequest();
             query.Email.Is(email);
-            var matchedCustomers = customerGateway.Search(query);
+            var matchedCustomers = await customerGateway.SearchAsync(query);
             Braintree.Customer customer = null;
             if (matchedCustomers.Ids.Count == 0)
             {
                 Braintree.CustomerRequest newCustomer = new Braintree.CustomerRequest();
                 newCustomer.Email = email;
 
-                var result = customerGateway.Create(newCustomer);
+                var result = await customerGateway.CreateAsync(newCustomer);
                 customer = result.Target;
             }
             else
@@ -42,24 +43,24 @@ namespace BeerPack
             return customer;
         }
 
-        internal Customer UpdateCustomer(string firstName, string lastName, string id)
+        internal async Task<Customer> UpdateCustomer(string firstName, string lastName, string id)
         {
             Braintree.CustomerRequest request = new Braintree.CustomerRequest();
             request.FirstName = firstName;
             request.LastName = lastName;
-            var result = gateway.Customer.Update(id, request);
+            var result = await gateway.Customer.UpdateAsync(id, request);
             return result.Target;
         }
 
-        internal void DeleteAddress(string email, string id)
+        internal async Task DeleteAddress(string email, string id)
         {
-            Customer c = GetCustomer(email);
+            Customer c = await GetCustomer(email);
             gateway.Address.Delete(c.Id, id);
         }
 
-        public void AddAddress(string email, string firstName, string lastName, string company, string streetAddress, string extendedAddress, string locality, string region, string postalCode, string countryName)
+        public async Task AddAddress(string email, string firstName, string lastName, string company, string streetAddress, string extendedAddress, string locality, string region, string postalCode, string countryName)
         {
-            Customer c = GetCustomer(email);
+            Customer c = await GetCustomer(email);
 
             Braintree.AddressRequest newAddress = new Braintree.AddressRequest
             {
@@ -77,9 +78,9 @@ namespace BeerPack
             gateway.Address.Create(c.Id, newAddress);
         }
 
-        public string AuthorizeCard(string email, decimal total, decimal tax, string trackingNumber, string addressId, string cardholderName, string cvv, string cardNumber, string expirationMonth, string expirationYear)
+        public async Task<string> AuthorizeCard(string email, decimal total, decimal tax, string trackingNumber, string addressId, string cardholderName, string cvv, string cardNumber, string expirationMonth, string expirationYear)
         {
-            var customer = GetCustomer(email);
+            var customer = await GetCustomer(email);
             Braintree.TransactionRequest transaction = new Braintree.TransactionRequest();
             //transaction.Amount = 1m;    //I can hard-code a dollar amount for now to test everything else
             transaction.Amount = total;

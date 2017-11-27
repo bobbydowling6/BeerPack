@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using RestSharp;
+using RestSharp.Authenticators;
+using System.Threading.Tasks;
 
 namespace BeerPack.Controllers
 {
@@ -15,33 +18,33 @@ namespace BeerPack.Controllers
         BeerPackPaymentService beerpackPaymentService = new BeerPackPaymentService();
         // GET: Account
         [Authorize]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var customer = beerpackPaymentService.GetCustomer(User.Identity.Name);
+            var customer = await beerpackPaymentService.GetCustomer(User.Identity.Name);
             return View(customer);    
         }
 
         [HttpPost]
         [Authorize]
-        public ActionResult Index(string firstName, string lastName, string id)
+        public async Task<ActionResult> Index(string firstName, string lastName, string id)
         {
-            Braintree.Customer customer = beerpackPaymentService.UpdateCustomer(firstName, lastName, id);
+            Braintree.Customer customer = await beerpackPaymentService.UpdateCustomer(firstName, lastName, id);
             ViewBag.Message = "Updated Successfully";
 
             return View(customer);
         }
 
         [Authorize]
-        public ActionResult Addresses()
+        public async Task<ActionResult> Addresses()
         {
-            var customer = beerpackPaymentService.GetCustomer(User.Identity.Name);
+            var customer = await beerpackPaymentService.GetCustomer(User.Identity.Name);
             return View(customer.Addresses);
         }
 
         [Authorize]
-        public ActionResult DeleteAddress(string id)
+        public async Task<ActionResult> DeleteAddress(string id)
         {
-            beerpackPaymentService.DeleteAddress(User.Identity.Name, id);
+            await beerpackPaymentService.DeleteAddress(User.Identity.Name, id);
             TempData["SuccessMessage"] = "Address deleted successfully";
             return RedirectToAction("Addresses");
 
@@ -49,10 +52,10 @@ namespace BeerPack.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult AddAddress(string firstName, string lastName, string company, string streetAddress, string extendedAddress, string locality, string region, string postalCode, string countryName)
+        public async Task<ActionResult> AddAddress(string firstName, string lastName, string company, string streetAddress, string extendedAddress, string locality, string region, string postalCode, string countryName)
         {
 
-            beerpackPaymentService.AddAddress(User.Identity.Name, firstName, lastName, company, streetAddress, extendedAddress, locality, region, postalCode, countryName);
+           await beerpackPaymentService.AddAddress(User.Identity.Name, firstName, lastName, company, streetAddress, extendedAddress, locality, region, postalCode, countryName);
 
             TempData["SuccessMessage"] = "Address added successfully";
             return RedirectToAction("Addresses");
@@ -64,7 +67,7 @@ namespace BeerPack.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(string username, string password)
+        public async Task<ActionResult> Register(string username, string password)
         {
             //Make sure the following statements are in the using block:
             //using Microsoft.AspNet.Identity;
@@ -73,10 +76,10 @@ namespace BeerPack.Controllers
             var userManager = HttpContext.GetOwinContext().GetUserManager<UserManager<IdentityUser>>();
             IdentityUser user = new IdentityUser { Email = username, UserName = username };
 
-            IdentityResult result = userManager.Create(user, password);
+            IdentityResult result = await userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
-                var userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+                var userIdentity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
                 HttpContext.GetOwinContext().Authentication.SignIn(new Microsoft.Owin.Security.AuthenticationProperties
                 {
                     IsPersistent = true,
@@ -130,18 +133,38 @@ namespace BeerPack.Controllers
         }
 
         [HttpPost]
-        public ActionResult ForgotPassword(string email)
+        public async Task<ActionResult> ForgotPassword(string email)
         {
             var userManager = HttpContext.GetOwinContext().GetUserManager<UserManager<IdentityUser>>();
             var user = userManager.FindByEmail(email);
             if (user != null)
             {
-                string resetToken = userManager.GeneratePasswordResetToken(user.Id);
-                string resetUrl = Request.Url.GetLeftPart(UriPartial.Authority) + "Account/ResetPassword?email=" + email + "&token=" + resetToken;
+                string resetToken = await userManager.GeneratePasswordResetTokenAsync(user.Id);
+                string resetUrl = Request.Url.GetLeftPart(UriPartial.Authority) + "/Account/ResetPassword?email=" + email + "&token=" + resetToken;
                 string message = string.Format("<a href=\"{0}\">Reset your password</a>", resetUrl);
-                userManager.SendEmail(user.Id, "your password reset token", resetToken);
-            }
+                await userManager.SendEmailAsync(user.Id, "your password reset token", message);
 
+                SendForgotEmail();
+                IRestResponse SendForgotEmail()
+                {
+                    RestClient client = new RestClient();
+                    client.BaseUrl = new Uri("https://api.mailgun.net/v3");
+                    client.Authenticator =
+                        new HttpBasicAuthenticator("api",
+                                                    System.Configuration.ConfigurationManager.AppSettings["MailGun.PrivateKey"]);
+                    RestRequest request = new RestRequest();
+                    request.AddParameter("domain", "sandboxf4eb1f22f4094912ad448a1ec94c09ef.mailgun.org", ParameterType.UrlSegment);
+                    request.Resource = "{domain}/messages";
+                    request.AddParameter("from", "Mailgun Sandbox <postmaster@sandboxf4eb1f22f4094912ad448a1ec94c09ef.mailgun.org>");
+                    request.AddParameter("to", email);
+                    request.AddParameter("subject", "Hello");
+                    request.AddParameter("text", message);
+                    //request.AddParameter("text", "hi");
+                    request.Method = Method.POST;
+                    return client.Execute(request);
+                }
+            }
+           
             return RedirectToAction("ForgotPasswordSent");
         }
 
@@ -156,17 +179,17 @@ namespace BeerPack.Controllers
         }
 
         [HttpPost]
-        public ActionResult ResetPassword(string email, string token, string newPassword)
+        public async Task<ActionResult> ResetPassword(string email, string token, string newPassword)
         {
             var userManager = HttpContext.GetOwinContext().GetUserManager<UserManager<IdentityUser>>();
-            var user = userManager.FindByEmail(email);
+            var user = await userManager.FindByEmailAsync(email);
             if (user != null)
             {
-                IdentityResult result = userManager.ResetPassword(user.Id, token, newPassword);
+                IdentityResult result = await userManager.ResetPasswordAsync(user.Id, token, newPassword);
                 if (result.Succeeded)
                 {
                     TempData["Message"] = "Your password has been updated successfully";
-                    return RedirectToAction("Account", "SignIn");
+                    return RedirectToAction("SignIn", "Account");
                 }
 
             }

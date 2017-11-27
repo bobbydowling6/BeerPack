@@ -1,10 +1,11 @@
-﻿
+﻿using System.Threading.Tasks;
 using BeerPack.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Configuration;
 
 namespace BeerPack.Controllers
 {
@@ -63,7 +64,7 @@ namespace BeerPack.Controllers
 
         // POST: Checkout
         [HttpPost]
-        public ActionResult Index(Models.CheckoutDetails model, string addressId)
+        public async Task<ActionResult> Index(Models.CheckoutDetails model, string addressId)
         {
 
 
@@ -83,7 +84,7 @@ namespace BeerPack.Controllers
                 #region pay for order
                 BeerPackPaymentService payments = new BeerPackPaymentService();
                 string email = User.Identity.IsAuthenticated ? User.Identity.Name : model.ContactEmail;
-                string message = payments.AuthorizeCard(email, total, tax, trackingNumber, addressId, model.CardholderName, model.CVV, model.CreditCardNumber, model.ExpirationMonth, model.ExpirationYear);
+                string message = await payments.AuthorizeCard(email, total, tax, trackingNumber, addressId, model.CardholderName, model.CVV, model.CreditCardNumber, model.ExpirationMonth, model.ExpirationYear);
                 #endregion
                 #region save order
                 if (string.IsNullOrEmpty(message))
@@ -105,17 +106,18 @@ namespace BeerPack.Controllers
                     };
                     db.Orders.Add(o);
 
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                     #endregion
                     #region send email
 
-                    BeerPackEmailService emailService = new BeerPackEmailService();
-                    emailService.SendAsync(new Microsoft.AspNet.Identity.IdentityMessage
-                    {
-                        Subject = "Your Receipt for order " + trackingNumber,
-                        Destination = model.ContactEmail,
-                        Body = "Thank you for shopping."
-                    });
+                    //BeerPackEmailService emailService = new BeerPackEmailService();
+                    //emailService.SendAsync(new Microsoft.AspNet.Identity.IdentityMessage
+                    //{
+                    //    Subject = "Your Receipt for order " + trackingNumber,
+                    //    Destination = model.ContactEmail,
+                    //    Body = "Thank you for shopping."
+                    //});
+                    
                     #endregion
                     #region reset cart
                     //Reset the cart - Trash the cookie, so they'll get a new cart next time they need one
@@ -131,6 +133,23 @@ namespace BeerPack.Controllers
                 ModelState.AddModelError("CreditCardNumber", message);
             }
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ValidateAddress(string street, string city, string state, string zip)
+        {
+            string authId = ConfigurationManager.AppSettings["SmartyStreets.AuthID"];
+            string authToken = ConfigurationManager.AppSettings["SmartyStreets.AuthToken"];
+            SmartyStreets.ClientBuilder clientBuilder = new SmartyStreets.ClientBuilder(authId, authToken);
+            var client = clientBuilder.BuildUsStreetApiClient();
+            SmartyStreets.USStreetApi.Lookup lookup = new SmartyStreets.USStreetApi.Lookup();
+            lookup.City = city;
+            lookup.ZipCode = zip;
+            lookup.Street = street;
+            lookup.State = state;
+            client.Send(lookup);
+
+            return Json(lookup.Result.Select(x => new { street = x.DeliveryLine1, city = x.Components.CityName, state = x.Components.State, zip = x.Components.ZipCode + "-" + x.Components.Plus4Code }));
         }
     }
 }
