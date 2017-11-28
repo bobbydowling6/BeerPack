@@ -102,7 +102,16 @@ namespace BeerPack.Controllers
                         ShippingAddress1 = model.ShippingAddress,
                         ShippingCity = model.ShippingCity,
                         ShippingPostalCode = model.ShippingPostalCode,
-                        ShippingState = model.ShippingState
+                        ShippingState = model.ShippingState,
+                        OrderProducts = model.CurrentCart.CartProducts.Select(x => new OrderProduct
+                        {
+                            ProductID = x.ProductID,
+                            Quantity = x.Quantity,
+                            PlacedName = x.Beer.Name,
+                            PlacedUnitPrice = x.Beer.Price ?? 0m,
+                            DateCreated = DateTime.UtcNow,
+                            DateLastModified = DateTime.UtcNow
+                        }).ToArray()
                     };
                     db.Orders.Add(o);
 
@@ -136,7 +145,7 @@ namespace BeerPack.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ValidateAddress(string street, string city, string state, string zip)
+        public ActionResult ValidateAddress(string street, string city, string state, string zip)
         {
             string authId = ConfigurationManager.AppSettings["SmartyStreets.AuthID"];
             string authToken = ConfigurationManager.AppSettings["SmartyStreets.AuthToken"];
