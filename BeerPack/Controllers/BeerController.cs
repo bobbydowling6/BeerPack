@@ -2,14 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-
 namespace BeerPack.Controllers
 {
-
-    public class BeerController : Controller
+    public class ProductController : Controller
     {
         protected BeerPackEntities db = new BeerPackEntities();
 
@@ -22,46 +21,46 @@ namespace BeerPack.Controllers
             base.Dispose(disposing);
         }
 
-        // GET: Beer/List
-        public ActionResult List(string id)
+        // GET: Product/List
+        public async Task<ActionResult> List(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
-                return View(db.Beers);
+                return View(db.Beers.Where(x => x.IsApproved == true));
             }
-            return View(db.Beers.Where(x => x.Beer_Style == id));
+            else
+            {
+                var cat = await db.Categories.FindAsync(id);
+                return View(cat.Beers.Where(x => x.IsApproved == true));
+            }
         }
 
-        // GET: Beer
-        public ActionResult Index(int? id)
+        // GET: Product
+        public async Task<ActionResult> Index(int? id)
         {
-            
-            return View(db.Beers.Find(id));
+            return View(await db.Beers.FindAsync(id));
         }
 
         [HttpPost]
-        public ActionResult Index(Beer model)
+        public async Task<ActionResult> Index(Beer model)
         {
-            //TODO: Save the posted information to a database!
-            Guid cartID;
+            Guid? cartID = CartHelper.GetCartID();
             Cart cart = null;
-            if (Request.Cookies.AllKeys.Contains("cartID"))
+            if (cartID.HasValue)
             {
-
-                cartID = Guid.Parse(Request.Cookies["cartID"].Value);
-                cart = db.Carts.Find(cartID);
+                cart = await db.Carts.FindAsync(cartID);
             }
             if (cart == null)
             {
                 cartID = Guid.NewGuid();
                 cart = new Cart
                 {
-                    ID = cartID,
+                    ID = cartID.Value,
                     DateCreated = DateTime.UtcNow,
                     DateLastModified = DateTime.UtcNow
                 };
                 db.Carts.Add(cart);
-                Response.AppendCookie(new HttpCookie("cartID", cartID.ToString()));
+                Response.AppendCookie(new HttpCookie(CartHelper.CartID, cartID.ToString()));
             }
 
             CartProduct product = cart.CartProducts.FirstOrDefault(x => x.ProductID == model.BeerID);
@@ -81,15 +80,11 @@ namespace BeerPack.Controllers
             product.DateLastModified = DateTime.UtcNow;
             cart.DateLastModified = DateTime.UtcNow;
 
-            db.SaveChanges();
-
-
+            await db.SaveChangesAsync();
             TempData.Add("NewItem", model.Name);
 
-            //TODO: build up the cart controller!
             return RedirectToAction("Index", "Cart");
 
         }
-
     }
 }

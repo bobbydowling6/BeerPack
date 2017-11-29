@@ -237,15 +237,30 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BeerPackEmailService.cs" />
     <Compile Include="BeerPackPaymentService.cs" />
+    <Compile Include="CategoryActionFilterAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BeerController.cs" />
+    <Compile Include="Controllers\BeersAdminController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\CartHelper.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
     <Compile Include="Controllers\ReportHomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetRole.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUser.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserClaim.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserLogin.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Beer.cs">
       <DependentUpon>BeerPackModels.tt</DependentUpon>
@@ -272,6 +287,9 @@
       <DependentUpon>BeerPackModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CartProduct.cs">
+      <DependentUpon>BeerPackModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Category.cs">
       <DependentUpon>BeerPackModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckoutDetails.cs" />
@@ -340,8 +358,8 @@
     <Content Include="images\Porters\Yuengling-Porter.jpg" />
     <Content Include="Models\BeerPackModels.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BeerPackModels.Context.cs</LastGenOutput>
       <DependentUpon>BeerPackModels.edmx</DependentUpon>
+      <LastGenOutput>BeerPackModels.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\BeerPackModels.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -407,6 +425,11 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Addresses.cshtml" />
     <Content Include="Views\Home\Beerbaskets.cshtml" />
+    <Content Include="Views\BeersAdmin\Create.cshtml" />
+    <Content Include="Views\BeersAdmin\Delete.cshtml" />
+    <Content Include="Views\BeersAdmin\Details.cshtml" />
+    <Content Include="Views\BeersAdmin\Edit.cshtml" />
+    <Content Include="Views\BeersAdmin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -419,6 +442,15 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BeerPackDatabase\BeerPackDatabase.sqlproj">
+      <Project>{6449f38f-fa12-4526-a74c-d949e14f8cdd}</Project>
+      <Name>BeerPackDatabase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

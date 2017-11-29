@@ -25,23 +25,27 @@
                     <li class="dropdown">
                         <a href="beerstyles.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Beer Styles <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Ales", "Index", "Beer", new { id = "Ales" }, null)</li>
-                            <li>@Html.ActionLink("IPA's", "Index", "Beer", new { id = "Ipa's" }, null)</li>
-                            <li>@Html.ActionLink("Lagers", "Index", "Beer", new { id = "Lagers" }, null)</li>
-                            <li>@Html.ActionLink("Pilsners", "Index", "Beer", new { id = "Pilsners" }, null)</li>
-                            <li>@Html.ActionLink("Porters", "Index", "Beer", new { id = "Porters" }, null)</li>                       
+                            @foreach (var cat in ViewBag.Categories)
+                            {
+                                <li><a href="@Url.Action("List", "Product", new { id = cat })">@cat</a></li>
+                            }                      
                         </ul>
                     </li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                                        @if (User.Identity.IsAuthenticated)
-                                        {
-                                            <li>@Html.ActionLink("Sign Out as " + User.Identity.Name, "SignOut", "Account")</li>
-                                        }
-                                        else
-                                        {
-                                            <li>@Html.ActionLink("Register", "Register", "Account")</li>
-                                            <li>@Html.ActionLink("Sign In", "SignIn", "Account")</li>
-                                        }
+                                       @if (User.Identity.IsAuthenticated)
+                                       {
+                                        <li><a href="@Url.Action("Index", "Account")"><span class="glyphicon glyphicon-wrench"></span>@User.Identity.Name</a></li>
+                                        <li>@Html.ActionLink("Sign Out", "SignOut", "Account")</li>
+                                           if (User.IsInRole("Administrator"))
+                                           {
+                                            <li>@Html.ActionLink("Products Admin", "Index", "ProductsAdmin")</li>
+                                           }
+                                       }
+                                       else
+                                       {
+                                        <li>@Html.ActionLink("Register", "Register", "Account")</li>
+                                        <li>@Html.ActionLink("Sign In", "SignIn", "Account")</li>
+                                       }
                     <li><a href="/cart"><span class="glyphicon glyphicon-shopping-cart"></span>Cart<span class="badge">@ViewBag.CartCount</span></a></li>
                 </ul>
 

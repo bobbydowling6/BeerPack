@@ -20,7 +20,7 @@ namespace BeerPack.Controllers
         [Authorize]
         public async Task<ActionResult> Index()
         {
-            var customer = await beerpackPaymentService.GetCustomer(User.Identity.Name);
+            var customer = await beerpackPaymentService.GetCustomerAsync(User.Identity.Name);
             return View(customer);    
         }
 
@@ -37,7 +37,7 @@ namespace BeerPack.Controllers
         [Authorize]
         public async Task<ActionResult> Addresses()
         {
-            var customer = await beerpackPaymentService.GetCustomer(User.Identity.Name);
+            var customer = await beerpackPaymentService.GetCustomerAsync(User.Identity.Name);
             return View(customer.Addresses);
         }
 

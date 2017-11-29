@@ -12,6 +12,7 @@ namespace BeerPack.Controllers
 {
     public class ReceiptController : Controller
     {
+        
         private BeerPackEntities db = new BeerPackEntities();
 
         // GET: Receipt

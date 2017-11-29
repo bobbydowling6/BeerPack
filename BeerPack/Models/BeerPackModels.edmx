@@ -4,7 +4,58 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BeerPackModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="BeerPackModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
         <EntityType Name="Beer">
           <Key>
             <PropertyRef Name="BeerID" />
@@ -17,6 +68,19 @@
           <Property Name="Price" Type="money" />
           <Property Name="Image" Type="nvarchar" MaxLength="1000" />
           <Property Name="Quantity" Type="int" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="rowguid" Type="uniqueidentifier" />
+          <Property Name="NewColumn" Type="nchar" MaxLength="10" />
+          <Property Name="LastModifiedBy" Type="nvarchar" MaxLength="1000" />
+          <Property Name="IsApproved" Type="bit" />
+        </EntityType>
+        <EntityType Name="BeerCategory">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+            <PropertyRef Name="BeerID" />
+          </Key>
+          <Property Name="CategoryID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="BeerID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="BeerStyle">
           <Key>
@@ -46,6 +110,12 @@
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="DateLastModified" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -79,6 +149,30 @@
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="DateLastModified" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_BeerCategory_Beer">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="BeerCategory" Type="Self.BeerCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="BeerCategory">
+              <PropertyRef Name="BeerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BeerCategory_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="BeerCategory" Type="Self.BeerCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BeerCategory">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CartProduct_Cart">
           <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
           <End Role="CartProduct" Type="Self.CartProduct" Multiplicity="*" />
@@ -100,6 +194,62 @@
             </Principal>
             <Dependent Role="CartProduct">
               <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -128,12 +278,27 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="BeerPackModelStoreContainer">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Beer" EntityType="Self.Beer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BeerCategory" EntityType="Self.BeerCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BeerStyle" EntityType="Self.BeerStyle" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CartProduct" EntityType="Self.CartProduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderProduct" EntityType="Self.OrderProduct" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BeerCategory_Beer" Association="Self.FK_BeerCategory_Beer">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="BeerCategory" EntitySet="BeerCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BeerCategory_Category" Association="Self.FK_BeerCategory_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="BeerCategory" EntitySet="BeerCategory" />
+          </AssociationSet>
           <AssociationSet Name="FK_CartProduct_Cart" Association="Self.FK_CartProduct_Cart">
             <End Role="Cart" EntitySet="Cart" />
             <End Role="CartProduct" EntitySet="CartProduct" />
@@ -141,6 +306,22 @@
           <AssociationSet Name="FK_CartProduct_Product" Association="Self.FK_CartProduct_Product">
             <End Role="Beer" EntitySet="Beer" />
             <End Role="CartProduct" EntitySet="CartProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderProduct_Beer" Association="Self.FK_OrderProduct_Beer">
             <End Role="Beer" EntitySet="Beer" />
@@ -151,10 +332,60 @@
             <End Role="OrderProduct" EntitySet="OrderProduct" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BeerPackModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+        </EntityType>
         <EntityType Name="Beer">
           <Key>
             <PropertyRef Name="BeerID" />
@@ -167,8 +398,14 @@
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Image" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Quantity" Type="Int32" />
-          <NavigationProperty Name="CartProducts" Relationship="BeerPackModel.FK_CartProduct_Product" FromRole="Beer" ToRole="CartProduct" />
-          <NavigationProperty Name="OrderProducts" Relationship="BeerPackModel.FK_OrderProduct_Beer" FromRole="Beer" ToRole="OrderProduct" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="rowguid" Type="Guid" />
+          <Property Name="NewColumn" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="LastModifiedBy" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="IsApproved" Type="Boolean" />
+          <NavigationProperty Name="CartProducts" Relationship="Self.FK_CartProduct_Product" FromRole="Beer" ToRole="CartProduct" />
+          <NavigationProperty Name="OrderProducts" Relationship="Self.FK_OrderProduct_Beer" FromRole="Beer" ToRole="OrderProduct" />
+          <NavigationProperty Name="Categories" Relationship="Self.BeerCategory" FromRole="Beer" ToRole="Category" />
         </EntityType>
         <EntityType Name="BeerStyle">
           <Key>
@@ -179,30 +416,6 @@
           <Property Name="Style" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityContainer Name="BeerPackEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Beers" EntityType="Self.Beer" />
-          <EntitySet Name="BeerStyles" EntityType="Self.BeerStyle" />
-          <EntitySet Name="Carts" EntityType="BeerPackModel.Cart" />
-          <EntitySet Name="CartProducts" EntityType="BeerPackModel.CartProduct" />
-          <EntitySet Name="Orders" EntityType="BeerPackModel.Order" />
-          <EntitySet Name="OrderProducts" EntityType="BeerPackModel.OrderProduct" />
-          <AssociationSet Name="FK_CartProduct_Product" Association="BeerPackModel.FK_CartProduct_Product">
-            <End Role="Beer" EntitySet="Beers" />
-            <End Role="CartProduct" EntitySet="CartProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderProduct_Beer" Association="BeerPackModel.FK_OrderProduct_Beer">
-            <End Role="Beer" EntitySet="Beers" />
-            <End Role="OrderProduct" EntitySet="OrderProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CartProduct_Cart" Association="BeerPackModel.FK_CartProduct_Cart">
-            <End Role="Cart" EntitySet="Carts" />
-            <End Role="CartProduct" EntitySet="CartProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderProduct_Order" Association="BeerPackModel.FK_OrderProduct_Order">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="OrderProduct" EntitySet="OrderProducts" />
-          </AssociationSet>
-        </EntityContainer>
         <EntityType Name="Cart">
           <Key>
             <PropertyRef Name="ID" />
@@ -211,7 +424,7 @@
           <Property Name="AspNetUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateLastModified" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="CartProducts" Relationship="BeerPackModel.FK_CartProduct_Cart" FromRole="Cart" ToRole="CartProduct" />
+          <NavigationProperty Name="CartProducts" Relationship="Self.FK_CartProduct_Cart" FromRole="Cart" ToRole="CartProduct" />
         </EntityType>
         <EntityType Name="CartProduct">
           <Key>
@@ -223,28 +436,35 @@
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateLastModified" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Beer" Relationship="BeerPackModel.FK_CartProduct_Product" FromRole="CartProduct" ToRole="Beer" />
-          <NavigationProperty Name="Cart" Relationship="BeerPackModel.FK_CartProduct_Cart" FromRole="CartProduct" ToRole="Cart" />
+          <NavigationProperty Name="Beer" Relationship="Self.FK_CartProduct_Product" FromRole="CartProduct" ToRole="Beer" />
+          <NavigationProperty Name="Cart" Relationship="Self.FK_CartProduct_Cart" FromRole="CartProduct" ToRole="Cart" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Beers" Relationship="Self.BeerCategory" FromRole="Category" ToRole="Beer" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TrackingNumber" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
-          <Property Name="PurchaserName" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
-          <Property Name="ShippingAddress1" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ShippingCity" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ShippingState" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ShippingPostalCode" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="SubTotal" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="ShippingAndHandling" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="Tax" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="TrackingNumber" Type="String" MaxLength="8" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PurchaserName" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ShippingAddress1" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ShippingCity" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ShippingState" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ShippingPostalCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="SubTotal" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ShippingAndHandling" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Tax" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateLastModified" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ShipDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="OrderProducts" Relationship="BeerPackModel.FK_OrderProduct_Order" FromRole="Order" ToRole="OrderProduct" />
+          <NavigationProperty Name="OrderProducts" Relationship="Self.FK_OrderProduct_Order" FromRole="Order" ToRole="OrderProduct" />
         </EntityType>
         <EntityType Name="OrderProduct">
           <Key>
@@ -255,15 +475,43 @@
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="PlacedName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PlacedUnitPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="PlacedUnitPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateLastModified" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Beer" Relationship="BeerPackModel.FK_OrderProduct_Beer" FromRole="OrderProduct" ToRole="Beer" />
-          <NavigationProperty Name="Order" Relationship="BeerPackModel.FK_OrderProduct_Order" FromRole="OrderProduct" ToRole="Order" />
+          <NavigationProperty Name="Beer" Relationship="Self.FK_OrderProduct_Beer" FromRole="OrderProduct" ToRole="Beer" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderProduct_Order" FromRole="OrderProduct" ToRole="Order" />
         </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CartProduct_Product">
-          <End Type="BeerPackModel.Beer" Role="Beer" Multiplicity="1" />
-          <End Type="BeerPackModel.CartProduct" Role="CartProduct" Multiplicity="*" />
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="CartProduct" Type="Self.CartProduct" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Beer">
               <PropertyRef Name="BeerID" />
@@ -274,8 +522,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrderProduct_Beer">
-          <End Type="BeerPackModel.Beer" Role="Beer" Multiplicity="1" />
-          <End Type="BeerPackModel.OrderProduct" Role="OrderProduct" Multiplicity="*" />
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Beer">
               <PropertyRef Name="BeerID" />
@@ -286,8 +534,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CartProduct_Cart">
-          <End Type="BeerPackModel.Cart" Role="Cart" Multiplicity="1" />
-          <End Type="BeerPackModel.CartProduct" Role="CartProduct" Multiplicity="*" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
+          <End Role="CartProduct" Type="Self.CartProduct" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Cart">
               <PropertyRef Name="ID" />
@@ -298,8 +546,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrderProduct_Order">
-          <End Type="BeerPackModel.Order" Role="Order" Multiplicity="1" />
-          <End Type="BeerPackModel.OrderProduct" Role="OrderProduct" Multiplicity="*" />
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Order">
               <PropertyRef Name="Id" />
@@ -309,12 +557,110 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="AspNetUserRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
+        </Association>
+        <Association Name="BeerCategory">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="*" />
+          <End Role="Category" Type="Self.Category" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="BeerPackEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+          <EntitySet Name="Beers" EntityType="Self.Beer" />
+          <EntitySet Name="BeerStyles" EntityType="Self.BeerStyle" />
+          <EntitySet Name="Carts" EntityType="Self.Cart" />
+          <EntitySet Name="CartProducts" EntityType="Self.CartProduct" />
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="OrderProducts" EntityType="Self.OrderProduct" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartProduct_Product" Association="Self.FK_CartProduct_Product">
+            <End Role="Beer" EntitySet="Beers" />
+            <End Role="CartProduct" EntitySet="CartProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProduct_Beer" Association="Self.FK_OrderProduct_Beer">
+            <End Role="Beer" EntitySet="Beers" />
+            <End Role="OrderProduct" EntitySet="OrderProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartProduct_Cart" Association="Self.FK_CartProduct_Cart">
+            <End Role="Cart" EntitySet="Carts" />
+            <End Role="CartProduct" EntitySet="CartProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProduct_Order" Association="Self.FK_OrderProduct_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderProduct" EntitySet="OrderProducts" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="BeerCategory" Association="Self.BeerCategory">
+            <End Role="Beer" EntitySet="Beers" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="BeerPackModelStoreContainer" CdmEntityContainer="BeerPackEntities">
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="BeerPackModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="BeerPackModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="BeerPackModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="BeerPackModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Beers">
             <EntityTypeMapping TypeName="BeerPackModel.Beer">
               <MappingFragment StoreEntitySet="Beer">
@@ -326,6 +672,11 @@
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="rowguid" ColumnName="rowguid" />
+                <ScalarProperty Name="NewColumn" ColumnName="NewColumn" />
+                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -342,57 +693,80 @@
           <EntitySetMapping Name="Carts">
             <EntityTypeMapping TypeName="BeerPackModel.Cart">
               <MappingFragment StoreEntitySet="Cart">
-                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="AspNetUserId" ColumnName="AspNetUserId" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AspNetUserId" ColumnName="AspNetUserId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CartProducts">
             <EntityTypeMapping TypeName="BeerPackModel.CartProduct">
               <MappingFragment StoreEntitySet="CartProduct">
-                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="CartID" ColumnName="CartID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="BeerPackModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="BeerPackModel.Order">
               <MappingFragment StoreEntitySet="Order">
-                <ScalarProperty Name="ShipDate" ColumnName="ShipDate" />
-                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="Tax" ColumnName="Tax" />
-                <ScalarProperty Name="ShippingAndHandling" ColumnName="ShippingAndHandling" />
-                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
-                <ScalarProperty Name="ShippingPostalCode" ColumnName="ShippingPostalCode" />
-                <ScalarProperty Name="ShippingState" ColumnName="ShippingState" />
-                <ScalarProperty Name="ShippingCity" ColumnName="ShippingCity" />
-                <ScalarProperty Name="ShippingAddress1" ColumnName="ShippingAddress1" />
-                <ScalarProperty Name="PurchaserName" ColumnName="PurchaserName" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PurchaserName" ColumnName="PurchaserName" />
+                <ScalarProperty Name="ShippingAddress1" ColumnName="ShippingAddress1" />
+                <ScalarProperty Name="ShippingCity" ColumnName="ShippingCity" />
+                <ScalarProperty Name="ShippingState" ColumnName="ShippingState" />
+                <ScalarProperty Name="ShippingPostalCode" ColumnName="ShippingPostalCode" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="ShippingAndHandling" ColumnName="ShippingAndHandling" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
+                <ScalarProperty Name="ShipDate" ColumnName="ShipDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderProducts">
             <EntityTypeMapping TypeName="BeerPackModel.OrderProduct">
               <MappingFragment StoreEntitySet="OrderProduct">
-                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="PlacedUnitPrice" ColumnName="PlacedUnitPrice" />
-                <ScalarProperty Name="PlacedName" ColumnName="PlacedName" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PlacedName" ColumnName="PlacedName" />
+                <ScalarProperty Name="PlacedUnitPrice" ColumnName="PlacedUnitPrice" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateLastModified" ColumnName="DateLastModified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="BeerPackModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetRoles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="AspNetUsers">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="BeerCategory" TypeName="BeerPackModel.BeerCategory" StoreEntitySet="BeerCategory">
+            <EndProperty Name="Beer">
+              <ScalarProperty Name="BeerID" ColumnName="BeerID" />
+            </EndProperty>
+            <EndProperty Name="Category">
+              <ScalarProperty Name="Id" ColumnName="CategoryID" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

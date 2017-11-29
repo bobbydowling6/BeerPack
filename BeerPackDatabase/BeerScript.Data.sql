@@ -41,14 +41,10 @@ insert into Beer ([Name], [Brand], [Beer Style], [Description], Price, Image)val
 ('Stone Smoked Porter W/Vanilla Bean', 'Stone Brewing', 'Porter', 'Smoked Beer', 2, '/images/Porters/stone-smoked-porter-vanilla-bean.jpg'),
 ('Yuengling Dark Brewed Porter', 'Yuengling Brewery', 'Porter', 'American Porter', 2, '/images/Porters/Yuengling-Porter.jpg')
 
-SELECT * FROM Beer
-
-Update Beer set Image = '/images/IPAs/firestoneipa.jpg' where Image = '/images/IPAs/firestoneipa.jpg';
-Update Beer set Image = '/images/IPAs/gooseislandipa.jpg' where Image = '/images/IPAs/gooseislandipa.jpg';
-Update Beer set Image = '/images/IPAs/Lagunitas.jpg' where Image = '/images/IPAs/Lagunitas.jpg';
-
-Update Beer set Image = '/images/IPAs/samualadamsipa.jpg' where Image = '/images/IPAs/samualadamsipa.jpg';
-Update Beer set Image = '/images/IPAs/sierranevada.jpg' where Image = '/images/IPAs/sierranevada.jpg';
-Update Beer set Image = '/images/IPAs/voodoo-ranger-by-new-belgium-brewing-co.jpg' where Image = '/images/IPAs/voodoo-ranger-by-new-belgium-brewing-co.jpg';
-
-Update Beer set Image = '/images/Lagers/samual adams.jpg' where Image = '/images/Lagers/samual adams.jpg';
+Insert Into Category (Id)
+Values
+('Ales'),
+('IPAs'),
+('Lagers'),
+('Pilsners'),
+('Porters')

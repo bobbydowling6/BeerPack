@@ -19,6 +19,7 @@ namespace BeerPack.Models
         {
             this.CartProducts = new HashSet<CartProduct>();
             this.OrderProducts = new HashSet<OrderProduct>();
+            this.Categories = new HashSet<Category>();
         }
     
         public int BeerID { get; set; }
@@ -29,10 +30,17 @@ namespace BeerPack.Models
         public Nullable<decimal> Price { get; set; }
         public string Image { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public Nullable<System.DateTime> DateCreated { get; set; }
+        public Nullable<System.Guid> rowguid { get; set; }
+        public string NewColumn { get; set; }
+        public string LastModifiedBy { get; set; }
+        public Nullable<bool> IsApproved { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartProduct> CartProducts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

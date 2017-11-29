@@ -20,7 +20,7 @@ namespace BeerPack
 
         }
 
-        public async Task<Braintree.Customer> GetCustomer(string email)
+        public async Task<Braintree.Customer> GetCustomerAsync(string email)
         {
 
             var customerGateway = gateway.Customer;
@@ -54,13 +54,13 @@ namespace BeerPack
 
         internal async Task DeleteAddress(string email, string id)
         {
-            Customer c = await GetCustomer(email);
+            Customer c = await GetCustomerAsync(email);
             gateway.Address.Delete(c.Id, id);
         }
 
         public async Task AddAddress(string email, string firstName, string lastName, string company, string streetAddress, string extendedAddress, string locality, string region, string postalCode, string countryName)
         {
-            Customer c = await GetCustomer(email);
+            Customer c = await GetCustomerAsync(email);
 
             Braintree.AddressRequest newAddress = new Braintree.AddressRequest
             {
@@ -80,7 +80,7 @@ namespace BeerPack
 
         public async Task<string> AuthorizeCard(string email, decimal total, decimal tax, string trackingNumber, string addressId, string cardholderName, string cvv, string cardNumber, string expirationMonth, string expirationYear)
         {
-            var customer = await GetCustomer(email);
+            var customer = await GetCustomerAsync(email);
             Braintree.TransactionRequest transaction = new Braintree.TransactionRequest();
             //transaction.Amount = 1m;    //I can hard-code a dollar amount for now to test everything else
             transaction.Amount = total;
