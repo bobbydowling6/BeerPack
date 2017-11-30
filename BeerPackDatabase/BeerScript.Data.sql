@@ -41,6 +41,8 @@ insert into Beer ([Name], [Brand], [Beer Style], [Description], Price, Image)val
 ('Stone Smoked Porter W/Vanilla Bean', 'Stone Brewing', 'Porter', 'Smoked Beer', 2, '/images/Porters/stone-smoked-porter-vanilla-bean.jpg'),
 ('Yuengling Dark Brewed Porter', 'Yuengling Brewery', 'Porter', 'American Porter', 2, '/images/Porters/Yuengling-Porter.jpg')
 
+delete Category
+
 Insert Into Category (Id)
 Values
 ('Ales'),
