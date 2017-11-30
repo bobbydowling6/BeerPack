@@ -31,7 +31,7 @@ namespace BeerPack.Controllers
             else
             {
                 var cat = await db.Categories.FindAsync(id);
-                return View(cat.Beers);
+                return View(cat.Beers.Where(x => x.Beer_Style == id));
             }
         }
 
@@ -44,7 +44,7 @@ namespace BeerPack.Controllers
         [HttpPost]
         public async Task<ActionResult> Index(Beer model)
         {
-            Guid? cartID = CartHelper.GetCartID();
+            Guid? cartID = this.GetCartID();
             Cart cart = null;
             if (cartID.HasValue)
             {
