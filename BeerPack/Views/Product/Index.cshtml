@@ -29,7 +29,7 @@
             <p>@Model.Description</p>
             <p>@((Model.Price ?? 0).ToString("C"))</p>
 
-            @using (Html.BeginForm("Index", "Beer", FormMethod.Post, new { @class = "myClass" }))
+            @using (Html.BeginForm("Index", "product", FormMethod.Post, new { @class = "myClass" }))
             {
                 @Html.HiddenFor(m => m.BeerID)
                 @Html.HiddenFor(m => m.Name)

@@ -26,12 +26,12 @@ namespace BeerPack.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return View(db.Beers.Where(x => x.IsApproved == true));
+                return View(db.Beers);
             }
             else
             {
                 var cat = await db.Categories.FindAsync(id);
-                return View(cat.Beers.Where(x => x.IsApproved == true));
+                return View(cat.Beers);
             }
         }
 

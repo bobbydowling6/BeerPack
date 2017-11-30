@@ -413,8 +413,8 @@
     <Content Include="Views\Checkout.cshtml" />
     <Content Include="Views\Checkout\Index.cshtml" />
     <Content Include="Views\ReportHome\Index.cshtml" />
-    <Content Include="Views\Beer\Index.cshtml" />
-    <Content Include="Views\Beer\List.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\List.cshtml" />
     <Content Include="Views\Receipt\Index.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\SignIn.cshtml" />
