@@ -7,14 +7,14 @@
 <div class="jumbotron">
     <div class="container">
         <div class="row">
-            <h2>Craft Beers</h2>
+            <h1 style="text-align:center">Craft Beers</h1>
             <br />
             @foreach (var product in Model)
             {
-                <div class="col-sm-4">
+                <div class="col-xs-4">
                     <div class="well">
-                        <h2>@product.Name</h2>
-                        <img class="img-circle img-responsive" src="@product.Image" />
+                        <h3><strong>@product.Name</strong></h3>
+                        <img class="img-rounded img-responsive" src="@product.Image" />
                         <p>@product.Description</p>
                         <p>@((product.Price ?? 0).ToString("C"))</p>                       
                         <div>
