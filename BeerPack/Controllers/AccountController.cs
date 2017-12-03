@@ -141,7 +141,9 @@ namespace BeerPack.Controllers
             {
                 string resetToken = await userManager.GeneratePasswordResetTokenAsync(user.Id);
                 string resetUrl = Request.Url.GetLeftPart(UriPartial.Authority) + "/Account/ResetPassword?email=" + email + "&token=" + resetToken;
-                string message = string.Format("<a href=\"{0}\">Reset your password</a>", resetUrl);
+                string message = string.Format("Well hello there, did you forget your password? No worries, we completely understand the frustration of losing a password like every normal human being would." +
+                    " All you need to do is just click on the link below this email and you should be good to go." 
+                    + "<a href=\"{0}\">Reset your password</a>", resetUrl);
                 await userManager.SendEmailAsync(user.Id, "your password reset token", message);
 
                 SendForgotEmail();
@@ -155,9 +157,9 @@ namespace BeerPack.Controllers
                     RestRequest request = new RestRequest();
                     request.AddParameter("domain", "sandboxf4eb1f22f4094912ad448a1ec94c09ef.mailgun.org", ParameterType.UrlSegment);
                     request.Resource = "{domain}/messages";
-                    request.AddParameter("from", "Mailgun Sandbox <postmaster@sandboxf4eb1f22f4094912ad448a1ec94c09ef.mailgun.org>");
+                    request.AddParameter("from", "BeerPack's IT Department <postmaster@sandboxf4eb1f22f4094912ad448a1ec94c09ef.mailgun.org>");
                     request.AddParameter("to", email);
-                    request.AddParameter("subject", "Hello");
+                    request.AddParameter("subject", "BeerPack Password Request");
                     request.AddParameter("text", message);
                     //request.AddParameter("text", "hi");
                     request.Method = Method.POST;
