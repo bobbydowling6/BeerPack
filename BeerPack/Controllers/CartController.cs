@@ -23,7 +23,7 @@ namespace BeerPack.Controllers
         // GET: Cart
         public ActionResult Index()
         {
-            Guid cartID = Guid.Parse(Request.Cookies["cartID"].Value);
+            Guid? cartID = this.GetCartID();
 
             return View(db.Carts.Find(cartID));
         }
@@ -37,6 +37,7 @@ namespace BeerPack.Controllers
             {
                 cart.CartProducts.ElementAt(i).Quantity = model.CartProducts.ElementAt(i).Quantity;
             }
+            db.CartProducts.RemoveRange(cart.CartProducts.Where(x => x.Quantity == 0));
             db.SaveChanges();
             return View(cart);
         }

@@ -22,6 +22,11 @@ namespace BeerPack.Controllers
             }
             base.Dispose(disposing);
         }
+        private async Task<Cart> InitializeCartAsync()
+        {
+            Guid? cartID = this.GetCartID();
+            return await db.Carts.FindAsync(cartID);
+        }
 
         // GET: Checkout
         public ActionResult Index()
